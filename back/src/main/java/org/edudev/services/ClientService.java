@@ -1,6 +1,7 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,6 +29,13 @@ public class ClientService {
 
 		repository.save(fromDTO(clientDTO));
 		return clientDTO;
+	}
+	
+	@Transactional
+	public Client findById(String id) {
+		Optional<Client> client = repository.findById(id);
+		return client.orElseThrow(() ->  WebError.returnError(Response.Status.NOT_FOUND, "Client not found!"));
+		
 	}
 
 	public Client fromDTO(ClientPostDTO clientDTO) {
