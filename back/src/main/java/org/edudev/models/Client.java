@@ -17,8 +17,10 @@ public class Client implements Serializable {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	private String name;
-	private Genre genre;
 	private String local;
+	private String imgUrl;
+	
+	private Genre genre;
 
 	private String email;
 	private String login;
@@ -33,9 +35,10 @@ public class Client implements Serializable {
 	}
 
 	public Client(String id, String name, Genre genre, String local, String email, String login, String password,
-			LocalDateTime birthdate, LocalDateTime lastTimeOnline, LocalDateTime enterDate) {
+			LocalDateTime birthdate, LocalDateTime lastTimeOnline, LocalDateTime enterDate, String imgUrl) {
 		this.id = id;
 		this.name = name;
+		this.imgUrl = imgUrl;
 		this.genre = genre;
 		this.local = local;
 		this.email = email;
@@ -44,6 +47,7 @@ public class Client implements Serializable {
 		this.birthdate = birthdate;
 		this.lastTimeOnline = lastTimeOnline;
 		this.enterDate = enterDate;
+		
 	}
 
 	public String getId() {
@@ -60,6 +64,14 @@ public class Client implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	public Genre getGenre() {

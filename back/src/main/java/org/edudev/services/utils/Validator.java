@@ -2,6 +2,7 @@ package org.edudev.services.utils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 import org.edudev.models.dtos.ClientPostDTO;
 import org.edudev.repositories.ClientRepository;
@@ -13,20 +14,17 @@ public class Validator {
 	private ClientRepository repository;
 	
 	
-	public String validateDTO(ClientPostDTO clientDTO) {
-		if(clientDTO.getEmail() == "") return "Email não pode estar vazia!";
-		if(clientDTO.getLogin() == "") return "Login não pode estar vazia!";
-		if(clientDTO.getPassword() == "") return "Senha não pode estar vazia!";
+	public void validateDTO(ClientPostDTO clientDTO) {
+		
+		if(clientDTO.getEmail() == "") 	WebError.sendError(Response.Status.BAD_REQUEST,"Email não pode estar vazio!");
+		if(clientDTO.getLogin() == "") WebError.sendError(Response.Status.BAD_REQUEST,"Login não pode estar vazia!");
+		if(clientDTO.getPassword() == "") WebError.sendError(Response.Status.BAD_REQUEST,"Senha não pode estar vazia!");
 
-		if(!clientDTO.getEmail().contains("@")) return "Email sem o @!";
-		if(clientDTO.getLogin().length() < 4) return "Login deve ter quatro caracteres ou mais!";
-		if(clientDTO.getPassword().length() < 5) return "Senha deve ter cinco caracteres ou mais!";
+		if(!clientDTO.getEmail().contains("@")) WebError.sendError(Response.Status.BAD_REQUEST,"Email sem o @!");
+		if(clientDTO.getLogin().length() < 4) WebError.sendError(Response.Status.BAD_REQUEST,"Login deve ter quatro caracteres ou mais!");
+		if(clientDTO.getPassword().length() < 5) WebError.sendError(Response.Status.BAD_REQUEST,"Senha deve ter cinco caracteres ou mais!");
 		
-		if(repository.findByLogin(clientDTO.getLogin()) != null) return "Login já existe";
-		if(repository.findByEmail(clientDTO.getEmail()) != null) return "Email já existe";
-		
-		return "";
-		
+		if(repository.findByLogin(clientDTO.getLogin()) != null) WebError.sendError(Response.Status.CONFLICT,"Login já existe");
+		if(repository.findByEmail(clientDTO.getEmail()) != null) WebError.sendError(Response.Status.CONFLICT,"Email já existe");
 	}
-	
 }
