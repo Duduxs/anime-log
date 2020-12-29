@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.edudev.enums.Genre;
+import org.edudev.models.dtos.CommentaryDTO;
 
 @Entity
 public class Client implements Serializable {
@@ -38,6 +39,9 @@ public class Client implements Serializable {
 
 	@OneToMany(mappedBy = "toLoginId")
 	private List<Notification> notifications = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "toLoginId")
+	private List<CommentaryDTO> commentaries = new ArrayList<>();
 
 	public Client() {
 
@@ -148,6 +152,10 @@ public class Client implements Serializable {
 
 	public List<Notification> getNotifications() {
 		return notifications;
+	}
+	
+	public List<CommentaryDTO> getCommantaries() {
+		return commentaries;
 	}
 
 	@Override

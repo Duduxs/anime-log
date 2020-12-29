@@ -1,36 +1,38 @@
-package org.edudev.models;
+package org.edudev.models.dtos;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Notification implements Serializable {
+public class CommentaryDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String id = UUID.randomUUID().toString();
+	private String imgUrl;
 	private String byLogin;
 	private String toLoginId;
-	private String imgUrl;
-	private String title;
-	private String message;
-
-	public Notification() {
+	
+	private String description;
+	@Column(nullable = true)
+	private LocalDateTime datePost;
+	
+	public CommentaryDTO() {
 
 	}
 
-	public Notification(String id, String imgUrl, String sourceUser, String title, String message, String byLogin,
-			String toLoginId) {
+	public CommentaryDTO(String id, String imgUrl, String byLogin, String description, LocalDateTime datePost) {
 		this.id = id;
 		this.imgUrl = imgUrl;
 		this.byLogin = byLogin;
-		this.title = title;
-		this.message = message;
-		this.toLoginId = toLoginId;
+		this.description = description;
+		this.datePost = datePost;
 	}
 
 	public String getId() {
@@ -57,28 +59,28 @@ public class Notification implements Serializable {
 		this.byLogin = byLogin;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public LocalDateTime getDatePost() {
+		return datePost;
+	}
+
+	public void setDatePost(LocalDateTime datePost) {
+		this.datePost = datePost;
+	}
+	
 	public String getToLoginId() {
 		return toLoginId;
 	}
 
 	public void setToLoginId(String toLoginId) {
 		this.toLoginId = toLoginId;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public class Notification implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Notification other = (Notification) obj;
+		CommentaryDTO other = (CommentaryDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

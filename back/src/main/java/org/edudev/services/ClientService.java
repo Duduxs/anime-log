@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import org.edudev.models.Client;
 import org.edudev.models.Notification;
 import org.edudev.models.dtos.ClientDTO;
+import org.edudev.models.dtos.CommentaryDTO;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
@@ -80,6 +81,9 @@ public class ClientService {
 		
 		for(Notification not : client.getNotifications()) 
 			clientDTO.getNotifications().add(not);
+		
+		for(CommentaryDTO com : client.getCommantaries()) 
+			clientDTO.getCommentaries().add(com);
 		
 		return clientDTO;
 	}

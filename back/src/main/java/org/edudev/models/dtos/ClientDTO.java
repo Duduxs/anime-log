@@ -19,6 +19,7 @@ public class ClientDTO {
 	private LocalDateTime lastTimeOnline;
 	
 	private List<Notification> notifications = new ArrayList<>();
+	private List<CommentaryDTO> commentaries = new ArrayList<>();
 
 	public ClientDTO() {
 
@@ -90,6 +91,10 @@ public class ClientDTO {
 
 	public List<Notification> getNotifications() {
 		return notifications;
+	}
+	
+	public List<CommentaryDTO> getCommentaries() {
+		return commentaries;
 	}
 
 

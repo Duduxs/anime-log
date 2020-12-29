@@ -56,7 +56,7 @@ public class NotificationService {
 
 	public void deleteById(String id) {
 		if(!repository.findById(id).isPresent() || id.isBlank()) {
-			WebError.sendError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!");
+			WebError.sendError(Response.Status.NOT_FOUND, "Notificação não encontrada!");
 		}
 		repository.deleteById(id);
 	

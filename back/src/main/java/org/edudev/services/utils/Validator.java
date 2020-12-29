@@ -43,4 +43,12 @@ public class Validator {
 		}
 
 	}
+	
+	public void validateUserCommentary(String login) {
+		try {
+			repository.findByLogin(login).getLogin();
+		} catch (Exception e) {
+			WebError.sendError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!");
+		}
+	}
 }
