@@ -1,5 +1,7 @@
 package org.edudev.resources;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -8,10 +10,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
-import org.edudev.models.Client;
-import org.edudev.models.dtos.ClientPostDTO;
+import org.edudev.models.dtos.ClientDTO;
 import org.edudev.services.ClientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,11 +28,14 @@ public class ClientResource {
 
 	@Inject
 	private ClientService service;
+	
+	@Context
+	UriInfo uriInfo;
 
 	@GET
 	@Path("/{id}")
 	public Response findById(@PathParam("id") String id) {
-		Client client = service.findById(id);
+		ClientDTO client = service.findById(id);
 		return Response.ok(client).build();
 	}
 	
@@ -37,14 +43,14 @@ public class ClientResource {
 	public Response findAllPaged(
 			@QueryParam("min") Integer min, 
 			@QueryParam("max") Integer max) {
-		Page<Client> clients = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "login"));
+		Page<ClientDTO> clients = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "login"));
 		return Response.ok(clients).build();
 	}
 	
 	@GET
 	@Path("/search")
 	public Response searchByLogin(@QueryParam("login") String login) {
-		Page<Client> clients = service.searchByLogin(login);
+		Page<ClientDTO> clients = service.searchByLogin(login);
 		return Response.ok(clients).build();
 	}
 	
@@ -56,9 +62,10 @@ public class ClientResource {
 	}
 	
 	@POST
-	public Response save(ClientPostDTO clientDTO) {
-		clientDTO = service.save(clientDTO);
-		return Response.ok(clientDTO).status(Response.Status.CREATED).build();
+	public Response save(ClientDTO clientDTO) {
+		service.save(clientDTO);
+		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", clientDTO.getId()).build();
+		return Response.created(uri).entity(clientDTO).build();
 	}
 	
 	

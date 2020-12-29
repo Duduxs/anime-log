@@ -2,10 +2,14 @@ package org.edudev.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.edudev.enums.Genre;
 
@@ -19,16 +23,21 @@ public class Client implements Serializable {
 	private String name;
 	private String local;
 	private String imgUrl;
-	
+
 	private Genre genre;
 
+	@Column(unique = true)
 	private String email;
+	@Column(unique = true)
 	private String login;
 	private String password;
 
 	private LocalDateTime birthdate;
 	private LocalDateTime lastTimeOnline;
 	private LocalDateTime enterDate;
+
+	@OneToMany(mappedBy = "toLoginId")
+	private List<Notification> notifications = new ArrayList<>();
 
 	public Client() {
 
@@ -47,13 +56,12 @@ public class Client implements Serializable {
 		this.birthdate = birthdate;
 		this.lastTimeOnline = lastTimeOnline;
 		this.enterDate = enterDate;
-		
 	}
-
+	
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -65,7 +73,7 @@ public class Client implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getImgUrl() {
 		return imgUrl;
 	}
@@ -138,8 +146,8 @@ public class Client implements Serializable {
 		this.enterDate = enterDate;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public List<Notification> getNotifications() {
+		return notifications;
 	}
 
 	@Override

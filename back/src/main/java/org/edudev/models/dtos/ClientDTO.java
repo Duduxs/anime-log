@@ -1,9 +1,14 @@
 package org.edudev.models.dtos;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class ClientPostDTO {
+import org.edudev.models.Client;
+import org.edudev.models.Notification;
+
+public class ClientDTO {
 
 	private String id = UUID.randomUUID().toString();
 	private String email;
@@ -11,18 +16,29 @@ public class ClientPostDTO {
 	private String password;
 
 	private LocalDateTime enterDate;
+	private LocalDateTime lastTimeOnline;
+	
+	private List<Notification> notifications = new ArrayList<>();
 
-	public ClientPostDTO() {
+	public ClientDTO() {
 
 	}
 
-	public ClientPostDTO(String id, String email, String login, String password, LocalDateTime enterDate) {
+	public ClientDTO(String id, String email, String login, String password, LocalDateTime enterDate) {
 		this.id = id;
 		this.email = email;
 		this.login = login;
 		this.password = password;
 		this.enterDate = enterDate;
+		this.lastTimeOnline = LocalDateTime.now();
 	}
+	
+	public ClientDTO(Client client) {
+		this.id = client.getId();
+		this.login = client.getLogin();
+		this.lastTimeOnline = LocalDateTime.now();
+	}
+
 
 	public String getId() {
 		return id;
@@ -63,6 +79,19 @@ public class ClientPostDTO {
 	public void setEnterDate(LocalDateTime enterDate) {
 		this.enterDate = enterDate;
 	}
+	
+	public LocalDateTime getLastTimeOnline() {
+		return lastTimeOnline;
+	}
+
+	public void setLastTimeOnline(LocalDateTime lastTimeOnline) {
+		this.lastTimeOnline = lastTimeOnline;
+	}
+
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -83,7 +112,7 @@ public class ClientPostDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ClientPostDTO other = (ClientPostDTO) obj;
+		ClientDTO other = (ClientDTO) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;
