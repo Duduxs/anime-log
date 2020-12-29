@@ -24,9 +24,10 @@ public class Notification implements Serializable {
 
 	}
 
-	public Notification(String id, String sourceUser, String title, String message, String byLogin,
+	public Notification(String id, String imgUrl, String sourceUser, String title, String message, String byLogin,
 			String toLoginId) {
 		this.id = id;
+		this.imgUrl = imgUrl;
 		this.byLogin = byLogin;
 		this.title = title;
 		this.message = message;

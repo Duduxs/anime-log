@@ -30,7 +30,7 @@ public class ClientService {
 
 	public ClientDTO findById(String id) {
 		Optional<Client> client = repository.findById(id);
-		ClientDTO clientDTO = toDTO(client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Client not found!")));
+		ClientDTO clientDTO = toDTO(client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!")));
 		return clientDTO;
 	}
 

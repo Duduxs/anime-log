@@ -4,9 +4,11 @@ import java.net.URI;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -47,4 +49,25 @@ public class NotificationResource {
 		Page<Notification> notifications = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "title"));
 		return Response.ok(notifications).build();
 	}
+	
+	@GET
+	@Path("/count")
+	public Response count() {
+		return Response.ok(service.count()).build();
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public Response deleteById(@PathParam(value="id")String id) {
+		service.deleteById(id);
+		return Response.ok().build();
+	}
+	
+	@DELETE
+	public Response deleteAll() {
+		service.deleteAll();
+		return Response.ok().build();
+	}
+	
+
 }

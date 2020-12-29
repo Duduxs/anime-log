@@ -20,13 +20,13 @@ public class NotificationService {
 
 	@Inject
 	private NotificationRepository repository;
-	
+
 	@Inject
 	private Validator validator;
-	
+
 	@Inject
 	private ClientRepository clientRepository;
-	
+
 	public Page<Notification> findAllByPaged(PageRequest pageRequest) {
 		if (repository.findAll(pageRequest).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
@@ -34,17 +34,35 @@ public class NotificationService {
 		return repository.findAll(pageRequest);
 	}
 
-	public Notification save(Notification notification) {;
+	public Long count() {
+		return repository.count();
+	}
+
+	public Notification save(Notification notification) {
+		;
 		validator.validateUserNotification(notification.getByLogin());
 
-		Client client = clientRepository.findById(notification.getToLoginId()).orElseThrow( () -> WebError.returnError(Response.Status.NOT_FOUND, "Id do Usuário destinatário não encontrado!"));
-		
+		Client client = clientRepository.findById(notification.getToLoginId()).orElseThrow(
+				() -> WebError.returnError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!"));
+
 		notification.setImgUrl(client.getImgUrl());
 		repository.save(notification);
-		
+
 		client.getNotifications().add(notification);
 		clientRepository.save(client);
-		
-		return notification; 
+
+		return notification;
+	}
+
+	public void deleteById(String id) {
+		if(!repository.findById(id).isPresent() || id.isBlank()) {
+			WebError.sendError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!");
+		}
+		repository.deleteById(id);
+	
+	}
+
+	public void deleteAll() {
+		repository.deleteAll();
 	}
 }
