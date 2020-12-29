@@ -3,16 +3,21 @@ package org.edudev.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.edudev.enums.Genre;
-import org.edudev.models.dtos.CommentaryDTO;
+import org.edudev.models.dtos.ClientFriendDTO;
 
 @Entity
 public class Client implements Serializable {
@@ -39,9 +44,13 @@ public class Client implements Serializable {
 
 	@OneToMany(mappedBy = "toLoginId")
 	private List<Notification> notifications = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "toLoginId")
-	private List<CommentaryDTO> commentaries = new ArrayList<>();
+	private List<Commentary> commentaries = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(name = "client_friend", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
+	private Set<ClientFriendDTO> friends = new HashSet<>();
 
 	public Client() {
 
@@ -61,7 +70,7 @@ public class Client implements Serializable {
 		this.lastTimeOnline = lastTimeOnline;
 		this.enterDate = enterDate;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -153,9 +162,21 @@ public class Client implements Serializable {
 	public List<Notification> getNotifications() {
 		return notifications;
 	}
-	
-	public List<CommentaryDTO> getCommantaries() {
+
+	public List<Commentary> getCommantaries() {
 		return commentaries;
+	}
+
+	public Set<ClientFriendDTO> getFriends() {
+		return friends;
+	}
+
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", name=" + name + ", local=" + local + ", imgUrl=" + imgUrl + ", genre=" + genre
+				+ ", email=" + email + ", login=" + login + ", password=" + password + ", birthdate=" + birthdate
+				+ ", lastTimeOnline=" + lastTimeOnline + ", enterDate=" + enterDate + ", notifications=" + notifications
+				+ ", commentaries=" + commentaries + ", friends=" + friends + "]";
 	}
 
 	@Override

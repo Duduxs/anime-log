@@ -16,7 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.edudev.models.dtos.CommentaryDTO;
+import org.edudev.models.Commentary;
 import org.edudev.services.CommentaryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,12 +45,12 @@ public class CommentaryResource {
 			@QueryParam("min") Integer min, 
 			@QueryParam("max") Integer max) {
 		
-		Page<CommentaryDTO> commentaries = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "datePost"));
+		Page<Commentary> commentaries = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "datePost"));
 		return Response.ok(commentaries).build();
 	}
 	
 	@POST
-	public Response save(CommentaryDTO commentary) {
+	public Response save(Commentary commentary) {
 		service.save(commentary);
 		
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", commentary.getId()).build();
@@ -59,7 +59,7 @@ public class CommentaryResource {
 	
 	@PATCH
 	@Path("/{id}")
-	public Response update(CommentaryDTO commentary, @PathParam(value="id")String id) {
+	public Response update(Commentary commentary, @PathParam(value="id")String id) {
 		service.update(commentary, id);
 		return Response.noContent().build();
 	}

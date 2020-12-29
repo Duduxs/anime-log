@@ -1,4 +1,4 @@
-package org.edudev.models.dtos;
+package org.edudev.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class CommentaryDTO implements Serializable {
+public class Commentary implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,11 +23,11 @@ public class CommentaryDTO implements Serializable {
 	@Column(nullable = true)
 	private LocalDateTime datePost;
 	
-	public CommentaryDTO() {
+	public Commentary() {
 
 	}
 
-	public CommentaryDTO(String id, String imgUrl, String byLogin, String description, LocalDateTime datePost) {
+	public Commentary(String id, String imgUrl, String byLogin, String description, LocalDateTime datePost) {
 		this.id = id;
 		this.imgUrl = imgUrl;
 		this.byLogin = byLogin;
@@ -99,7 +99,7 @@ public class CommentaryDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CommentaryDTO other = (CommentaryDTO) obj;
+		Commentary other = (Commentary) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

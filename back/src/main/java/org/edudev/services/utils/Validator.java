@@ -51,4 +51,12 @@ public class Validator {
 			WebError.sendError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!");
 		}
 	}
+	
+	public void validateUserFriend(String login) {
+		try {
+			repository.findByLogin(login).getLogin();
+		} catch (Exception e) {
+			WebError.sendError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!");
+		}
+	}
 }

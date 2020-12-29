@@ -1,12 +1,25 @@
 package org.edudev.models.dtos;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class ClientFriendDTO {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+import org.edudev.models.Client;
+
+@Entity
+@Table(name =  "clientFriend")
+public class ClientFriendDTO implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
+	@Id
 	private String id = UUID.randomUUID().toString();
-	private String name;
+	private String byLogin;
+	private String toLoginId;
 	private String imgUrl;
 	private String local;
 
@@ -16,12 +29,20 @@ public class ClientFriendDTO {
 
 	}
 
-	public ClientFriendDTO(String id, String name, String imgUrl, String local, LocalDateTime lastTimeOnline) {
+	public ClientFriendDTO(String id, String byLogin, String imgUrl, String local, LocalDateTime lastTimeOnline) {
 		this.id = id;
-		this.name = name;
+		this.byLogin = byLogin;
 		this.imgUrl = imgUrl;
 		this.local = local;
 		this.lastTimeOnline = lastTimeOnline;
+	}
+	
+	public ClientFriendDTO(Client client) {
+		this.id = client.getId();
+		this.byLogin = client.getLogin();
+		this.imgUrl = client.getImgUrl();
+		this.local = client.getLocal();
+		this.lastTimeOnline = client.getLastTimeOnline();
 	}
 
 	public String getId() {
@@ -32,12 +53,20 @@ public class ClientFriendDTO {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getByLogin() {
+		return byLogin;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setByLogin(String byLogin) {
+		this.byLogin = byLogin;
+	}
+	
+	public String getToLoginId() {
+		return toLoginId;
+	}
+
+	public void setToLoginId(String toLoginId) {
+		this.toLoginId = toLoginId;
 	}
 
 	public String getImgUrl() {

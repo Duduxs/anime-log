@@ -9,9 +9,10 @@ import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
 import org.edudev.models.Client;
+import org.edudev.models.Commentary;
 import org.edudev.models.Notification;
 import org.edudev.models.dtos.ClientDTO;
-import org.edudev.models.dtos.CommentaryDTO;
+import org.edudev.models.dtos.ClientFriendDTO;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
@@ -60,7 +61,7 @@ public class ClientService {
 		validator.validateDTO(clientDTO);
 		repository.save(fromDTO(clientDTO));
 		return clientDTO;
-	}
+	}	
 
 	public Client fromDTO(ClientDTO clientDTO) {
 		Client c = new Client();
@@ -82,8 +83,11 @@ public class ClientService {
 		for(Notification not : client.getNotifications()) 
 			clientDTO.getNotifications().add(not);
 		
-		for(CommentaryDTO com : client.getCommantaries()) 
+		for(Commentary com : client.getCommantaries()) 
 			clientDTO.getCommentaries().add(com);
+		
+		for(ClientFriendDTO cfd : client.getFriends())
+			clientDTO.getFriends().add(cfd);
 		
 		return clientDTO;
 	}

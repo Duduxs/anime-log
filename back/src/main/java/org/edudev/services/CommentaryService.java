@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
 import org.edudev.models.Client;
-import org.edudev.models.dtos.CommentaryDTO;
+import org.edudev.models.Commentary;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.repositories.CommentaryRepository;
 import org.edudev.services.utils.Validator;
@@ -29,14 +29,14 @@ public class CommentaryService {
 	@Inject
 	private Validator validator;
 	
-	public Page<CommentaryDTO> findAllByPaged(PageRequest pageRequest) {
+	public Page<Commentary> findAllByPaged(PageRequest pageRequest) {
 		if (repository.findAll(pageRequest).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 
 		return repository.findAll(pageRequest);
 	}
 	
-	public CommentaryDTO save(CommentaryDTO commentaryDTO) {	
+	public Commentary save(Commentary commentaryDTO) {	
 		validator.validateUserCommentary(commentaryDTO.getByLogin());
 		Client client = clientRepository.findById(commentaryDTO.getToLoginId()).orElseThrow(
 				() -> WebError.returnError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!"));
@@ -50,8 +50,8 @@ public class CommentaryService {
 		return commentaryDTO;
 	}
 	
-	public void update(CommentaryDTO commentaryDTO, String id) {
-		CommentaryDTO commentaryUpdate = repository.findById(id).orElseThrow(
+	public void update(Commentary commentaryDTO, String id) {
+		Commentary commentaryUpdate = repository.findById(id).orElseThrow(
 				() -> WebError.returnError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!"));
 		commentaryUpdate.setDescription(commentaryDTO.getDescription());
 	}

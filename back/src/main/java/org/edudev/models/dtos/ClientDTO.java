@@ -2,10 +2,13 @@ package org.edudev.models.dtos;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.edudev.models.Client;
+import org.edudev.models.Commentary;
 import org.edudev.models.Notification;
 
 public class ClientDTO {
@@ -19,7 +22,8 @@ public class ClientDTO {
 	private LocalDateTime lastTimeOnline;
 	
 	private List<Notification> notifications = new ArrayList<>();
-	private List<CommentaryDTO> commentaries = new ArrayList<>();
+	private List<Commentary> commentaries = new ArrayList<>();
+	private Set<ClientFriendDTO> friends = new HashSet<>();
 
 	public ClientDTO() {
 
@@ -93,10 +97,13 @@ public class ClientDTO {
 		return notifications;
 	}
 	
-	public List<CommentaryDTO> getCommentaries() {
+	public List<Commentary> getCommentaries() {
 		return commentaries;
 	}
-
+	
+	public Set<ClientFriendDTO> getFriends() {
+		return friends;
+	}
 
 	@Override
 	public int hashCode() {
