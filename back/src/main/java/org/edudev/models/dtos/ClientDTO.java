@@ -9,41 +9,44 @@ import java.util.UUID;
 
 import org.edudev.models.Client;
 import org.edudev.models.Commentary;
+import org.edudev.models.Friend;
 import org.edudev.models.Notification;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientDTO {
 
 	private String id = UUID.randomUUID().toString();
 	private String email;
 	private String login;
 	private String password;
-
+	private String local;
+	private String imgUrl;
+	
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime enterDate;
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime lastTimeOnline;
 	
-	private List<Notification> notifications = new ArrayList<>();
+	private Set<Notification> notifications = new HashSet<>();
 	private List<Commentary> commentaries = new ArrayList<>();
-	private Set<ClientFriendDTO> friends = new HashSet<>();
+	private Set<Friend> friends = new HashSet<>();
 
 	public ClientDTO() {
 
 	}
 
-	public ClientDTO(String id, String email, String login, String password, LocalDateTime enterDate) {
+	public ClientDTO(String id, String email, String login, String password, LocalDateTime enterDate, LocalDateTime lastTimeOnline) {
 		this.id = id;
 		this.email = email;
 		this.login = login;
 		this.password = password;
 		this.enterDate = enterDate;
-		this.lastTimeOnline = LocalDateTime.now();
+		this.lastTimeOnline = lastTimeOnline;
 	}
-	
-	public ClientDTO(Client client) {
-		this.id = client.getId();
-		this.login = client.getLogin();
-		this.lastTimeOnline = LocalDateTime.now();
-	}
-
 
 	public String getId() {
 		return id;
@@ -76,6 +79,22 @@ public class ClientDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getLocal() {
+		return local;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
+	}
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 
 	public LocalDateTime getEnterDate() {
 		return enterDate;
@@ -93,7 +112,7 @@ public class ClientDTO {
 		this.lastTimeOnline = lastTimeOnline;
 	}
 
-	public List<Notification> getNotifications() {
+	public Set<Notification> getNotifications() {
 		return notifications;
 	}
 	
@@ -101,7 +120,7 @@ public class ClientDTO {
 		return commentaries;
 	}
 	
-	public Set<ClientFriendDTO> getFriends() {
+	public Set<Friend> getFriends() {
 		return friends;
 	}
 

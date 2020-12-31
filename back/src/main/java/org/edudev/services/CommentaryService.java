@@ -8,11 +8,13 @@ import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
 import org.edudev.models.Client;
+import org.edudev.models.Friend;
 import org.edudev.models.Commentary;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.repositories.CommentaryRepository;
 import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
+import org.jboss.logging.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -22,6 +24,8 @@ public class CommentaryService {
 
 	@Inject
 	private CommentaryRepository repository;
+	
+	private static final Logger LOG = Logger.getLogger(Commentary.class);
 	
 	@Inject
 	private ClientRepository clientRepository;

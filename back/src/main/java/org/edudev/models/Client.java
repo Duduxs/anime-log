@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,7 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.edudev.enums.Genre;
-import org.edudev.models.dtos.ClientFriendDTO;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Client implements Serializable {
@@ -43,14 +45,15 @@ public class Client implements Serializable {
 	private LocalDateTime enterDate;
 
 	@OneToMany(mappedBy = "toLoginId")
-	private List<Notification> notifications = new ArrayList<>();
+	private Set<Notification> notifications = new HashSet<>();
 
 	@OneToMany(mappedBy = "toLoginId")
 	private List<Commentary> commentaries = new ArrayList<>();
 
 	@ManyToMany
-	@JoinTable(name = "client_friend", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
-	private Set<ClientFriendDTO> friends = new HashSet<>();
+	@JsonManagedReference
+	@JoinTable(name = "client_friend_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
+	private Set<Friend> friends = new HashSet<>();
 
 	public Client() {
 
@@ -159,7 +162,7 @@ public class Client implements Serializable {
 		this.enterDate = enterDate;
 	}
 
-	public List<Notification> getNotifications() {
+	public Set<Notification> getNotifications() {
 		return notifications;
 	}
 
@@ -167,7 +170,7 @@ public class Client implements Serializable {
 		return commentaries;
 	}
 
-	public Set<ClientFriendDTO> getFriends() {
+	public Set<Friend> getFriends() {
 		return friends;
 	}
 

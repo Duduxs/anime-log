@@ -1,4 +1,4 @@
-package org.edudev.models.dtos;
+package org.edudev.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -6,67 +6,51 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-import org.edudev.models.Client;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
-@Table(name =  "clientFriend")
-public class ClientFriendDTO implements Serializable{
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Friend implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private String id = UUID.randomUUID().toString();
-	private String byLogin;
-	private String toLoginId;
 	private String imgUrl;
+	private String login;
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	private LocalDateTime lastTimeOnline;
 	private String local;
 
-	private LocalDateTime lastTimeOnline;
-
-	public ClientFriendDTO() {
-
-	}
-
-	public ClientFriendDTO(String id, String byLogin, String imgUrl, String local, LocalDateTime lastTimeOnline) {
-		this.id = id;
-		this.byLogin = byLogin;
-		this.imgUrl = imgUrl;
-		this.local = local;
-		this.lastTimeOnline = lastTimeOnline;
+	
+	public Friend() {
+		
 	}
 	
-	public ClientFriendDTO(Client client) {
-		this.id = client.getId();
-		this.byLogin = client.getLogin();
-		this.imgUrl = client.getImgUrl();
-		this.local = client.getLocal();
-		this.lastTimeOnline = client.getLastTimeOnline();
+	public Friend(String id, String imgUrl, String login, LocalDateTime lastTimeOnline, String local) {
+		this.id = id;
+		this.imgUrl = imgUrl;
+		this.login = login;
+		this.lastTimeOnline = lastTimeOnline;
+		this.local = local;
+	}
+	
+	public Friend(Client client) {
+		this.setImgUrl(client.getImgUrl());
+		this.setLogin(client.getLogin());
+		this.setLastTimeOnline(client.getLastTimeOnline());
+		this.setLocal(client.getLocal());
 	}
 
+	
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getByLogin() {
-		return byLogin;
-	}
-
-	public void setByLogin(String byLogin) {
-		this.byLogin = byLogin;
-	}
-	
-	public String getToLoginId() {
-		return toLoginId;
-	}
-
-	public void setToLoginId(String toLoginId) {
-		this.toLoginId = toLoginId;
 	}
 
 	public String getImgUrl() {
@@ -77,12 +61,12 @@ public class ClientFriendDTO implements Serializable{
 		this.imgUrl = imgUrl;
 	}
 
-	public String getLocal() {
-		return local;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setLocal(String local) {
-		this.local = local;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public LocalDateTime getLastTimeOnline() {
@@ -91,6 +75,14 @@ public class ClientFriendDTO implements Serializable{
 
 	public void setLastTimeOnline(LocalDateTime lastTimeOnline) {
 		this.lastTimeOnline = lastTimeOnline;
+	}
+
+	public String getLocal() {
+		return local;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
 	}
 
 	@Override
@@ -109,7 +101,7 @@ public class ClientFriendDTO implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ClientFriendDTO other = (ClientFriendDTO) obj;
+		Friend other = (Friend) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -6,11 +6,13 @@ import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
 import org.edudev.models.Client;
+import org.edudev.models.Friend;
 import org.edudev.models.Notification;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.repositories.NotificationRepository;
 import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
+import org.jboss.logging.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -21,6 +23,8 @@ public class NotificationService {
 	@Inject
 	private NotificationRepository repository;
 
+	 private static final Logger LOG = Logger.getLogger(Notification.class);
+	
 	@Inject
 	private Validator validator;
 

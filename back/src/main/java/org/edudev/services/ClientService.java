@@ -10,12 +10,13 @@ import javax.ws.rs.core.Response;
 
 import org.edudev.models.Client;
 import org.edudev.models.Commentary;
+import org.edudev.models.Friend;
 import org.edudev.models.Notification;
 import org.edudev.models.dtos.ClientDTO;
-import org.edudev.models.dtos.ClientFriendDTO;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
+import org.jboss.logging.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,12 +28,15 @@ public class ClientService {
 	@Inject
 	private ClientRepository repository;
 
+	private static final Logger LOG = Logger.getLogger(Client.class);
+
 	@Inject
 	private Validator validator;
 
 	public ClientDTO findById(String id) {
 		Optional<Client> client = repository.findById(id);
-		ClientDTO clientDTO = toDTO(client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!")));
+		ClientDTO clientDTO = toDTO(
+				client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!")));
 		return clientDTO;
 	}
 
@@ -61,7 +65,7 @@ public class ClientService {
 		validator.validateDTO(clientDTO);
 		repository.save(fromDTO(clientDTO));
 		return clientDTO;
-	}	
+	}
 
 	public Client fromDTO(ClientDTO clientDTO) {
 		Client c = new Client();
@@ -70,25 +74,29 @@ public class ClientService {
 		c.setLogin(clientDTO.getLogin());
 		c.setPassword(clientDTO.getPassword());
 		c.setEnterDate(LocalDateTime.now());
+		c.setLastTimeOnline(LocalDateTime.now());
 
 		clientDTO.setId(c.getId());
 		clientDTO.setEnterDate(LocalDateTime.now());
-		
+		clientDTO.setLastTimeOnline(LocalDateTime.now());
 		return c;
 	}
-	
+
 	public ClientDTO toDTO(Client client) {
-		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), client.getPassword(), client.getEnterDate());
-		
-		for(Notification not : client.getNotifications()) 
+
+		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), client.getPassword(),
+				client.getEnterDate(), client.getLastTimeOnline());
+
+		for (Notification not : client.getNotifications())
 			clientDTO.getNotifications().add(not);
-		
-		for(Commentary com : client.getCommantaries()) 
+
+		for (Commentary com : client.getCommantaries())
 			clientDTO.getCommentaries().add(com);
-		
-		for(ClientFriendDTO cfd : client.getFriends())
-			clientDTO.getFriends().add(cfd);
-		
+
+		for (Friend fri : client.getFriends())
+			clientDTO.getFriends().add(fri);
+
 		return clientDTO;
 	}
+
 }

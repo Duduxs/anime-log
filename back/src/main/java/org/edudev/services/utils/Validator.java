@@ -4,6 +4,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+import org.edudev.models.Client;
 import org.edudev.models.dtos.ClientDTO;
 import org.edudev.repositories.ClientRepository;
 
@@ -43,7 +44,7 @@ public class Validator {
 		}
 
 	}
-	
+
 	public void validateUserCommentary(String login) {
 		try {
 			repository.findByLogin(login).getLogin();
@@ -51,12 +52,24 @@ public class Validator {
 			WebError.sendError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!");
 		}
 	}
-	
-	public void validateUserFriend(String login) {
+
+	public void validateFriend(String loginBody, String loginURL) {
+		Client clientBody = repository.findByLogin(loginBody);
+		Client clientURL = repository.findByLogin(loginURL);
+		
 		try {
-			repository.findByLogin(login).getLogin();
-		} catch (Exception e) {
+			clientBody.getLogin();
+		} catch (NullPointerException e) {
 			WebError.sendError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!");
+		}
+		try {
+			clientURL.getLogin();
+		} catch (NullPointerException e) {
+			WebError.sendError(Response.Status.NOT_FOUND, "Usuário destinatário não encontrado!");
+		}
+	
+		if (clientBody.getLogin().equals(clientURL.getLogin())) {
+			WebError.sendError(Response.Status.BAD_REQUEST, "Você não pode ser amigo de você mesmo!");
 		}
 	}
 }
