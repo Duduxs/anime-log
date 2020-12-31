@@ -27,7 +27,7 @@ import org.springframework.data.domain.Sort;
 @Transactional
 public class ClientService {
 
-	@Inject
+	@Inject	
 	private ClientRepository repository;
 
 	private static final Logger LOG = Logger.getLogger(Client.class);
@@ -41,6 +41,10 @@ public class ClientService {
 				client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!")));
 		return clientDTO;
 	}
+	
+	public Long count() {
+		return repository.count();
+	}
 
 	public Page<ClientDTO> findAllByPaged(PageRequest pageRequest) {
 		if (repository.findAll(pageRequest).isEmpty())
@@ -53,7 +57,6 @@ public class ClientService {
 		if (repository.findFirst10ByOnlineOrderByLoginDesc(true).isEmpty()) 
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 		
-
 		return repository.findFirst10ByOnlineOrderByLoginDesc(true).stream().map(this::toDTO).collect(Collectors.toList());
 	}
 

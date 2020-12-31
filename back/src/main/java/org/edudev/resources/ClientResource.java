@@ -33,6 +33,13 @@ public class ClientResource {
 	@Context
 	UriInfo uriInfo;
 
+	
+	@GET
+	@Path("/count")
+	public Response count() {
+		return Response.ok(service.count()).build();
+	}
+	
 	@GET
 	@Path("/{id}")
 	public Response findById(@PathParam("id") String id) {
