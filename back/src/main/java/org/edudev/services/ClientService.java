@@ -1,7 +1,9 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -43,8 +45,16 @@ public class ClientService {
 	public Page<ClientDTO> findAllByPaged(PageRequest pageRequest) {
 		if (repository.findAll(pageRequest).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
-
+		
 		return repository.findAll(pageRequest).map(this::toDTO);
+	}
+	
+	public List<ClientDTO> findLast10UsersOnline(){
+		if (repository.findFirst10ByOnlineOrderByLoginDesc(true).isEmpty()) 
+			WebError.sendError(Response.Status.NO_CONTENT, "");
+		
+
+		return repository.findFirst10ByOnlineOrderByLoginDesc(true).stream().map(this::toDTO).collect(Collectors.toList());
 	}
 
 	public Page<ClientDTO> searchByLogin(String login) {
@@ -75,6 +85,7 @@ public class ClientService {
 		c.setPassword(clientDTO.getPassword());
 		c.setEnterDate(LocalDateTime.now());
 		c.setLastTimeOnline(LocalDateTime.now());
+		c.setOnline(true);
 
 		clientDTO.setId(c.getId());
 		clientDTO.setEnterDate(LocalDateTime.now());
@@ -84,13 +95,13 @@ public class ClientService {
 
 	public ClientDTO toDTO(Client client) {
 
-		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), client.getPassword(),
+		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), true,  client.getPassword(),
 				client.getEnterDate(), client.getLastTimeOnline());
 
 		for (Notification not : client.getNotifications())
 			clientDTO.getNotifications().add(not);
 
-		for (Commentary com : client.getCommantaries())
+		for (Commentary com : client.getCommentaries())
 			clientDTO.getCommentaries().add(com);
 
 		for (Friend fri : client.getFriends())

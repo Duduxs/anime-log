@@ -1,5 +1,6 @@
 package org.edudev.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.edudev.models.Client;
@@ -16,6 +17,7 @@ public interface ClientRepository extends JpaRepository<Client, String>{
 	
 	@Query("FROM Client c WHERE LOWER(c.login) LIKE CONCAT('%',LOWER(:login),'%')")
 	public Page<Client> findByPagedLogin(@Param("login")String login, PageRequest pageRequest);
-	
+
+	public List<Client> findFirst10ByOnlineOrderByLoginDesc(Boolean online);
 	public Optional<Client> findByLoginAndPassword(String login, String password);
 }

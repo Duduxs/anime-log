@@ -1,6 +1,7 @@
 package org.edudev.resources;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -37,6 +38,13 @@ public class ClientResource {
 	public Response findById(@PathParam("id") String id) {
 		ClientDTO client = service.findById(id);
 		return Response.ok(client).build();
+	}
+	
+	@GET
+	@Path("/online")
+	public Response usersOnline() {
+		List<ClientDTO> clients = service.findLast10UsersOnline();
+		return Response.ok(clients).build();
 	}
 	
 	@GET

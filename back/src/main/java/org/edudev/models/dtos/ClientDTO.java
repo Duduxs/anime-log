@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.edudev.models.Client;
 import org.edudev.models.Commentary;
 import org.edudev.models.Friend;
 import org.edudev.models.Notification;
@@ -22,6 +21,7 @@ public class ClientDTO {
 	private String id = UUID.randomUUID().toString();
 	private String email;
 	private String login;
+	private Boolean online;
 	private String password;
 	private String local;
 	private String imgUrl;
@@ -39,10 +39,11 @@ public class ClientDTO {
 
 	}
 
-	public ClientDTO(String id, String email, String login, String password, LocalDateTime enterDate, LocalDateTime lastTimeOnline) {
+	public ClientDTO(String id, String email, String login, Boolean online, String password, LocalDateTime enterDate, LocalDateTime lastTimeOnline) {
 		this.id = id;
 		this.email = email;
 		this.login = login;
+		this.online = online;
 		this.password = password;
 		this.enterDate = enterDate;
 		this.lastTimeOnline = lastTimeOnline;
@@ -70,6 +71,14 @@ public class ClientDTO {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+	
+	public Boolean getOnline() {
+		return online;
+	}
+
+	public void setOnline(Boolean online) {
+		this.online = online;
 	}
 
 	public String getPassword() {

@@ -48,7 +48,7 @@ public class CommentaryService {
 		commentaryDTO.setDatePost(LocalDateTime.now());
 		repository.save(commentaryDTO);
 		
-		client.getCommantaries().add(commentaryDTO);
+		client.getCommentaries().add(commentaryDTO);
 		clientRepository.save(client);
 		
 		return commentaryDTO;
