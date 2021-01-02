@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.edudev.models.dtos.AnimeDTO;
 import org.edudev.models.dtos.ClientDTO;
 import org.edudev.services.ClientService;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ public class ClientResource {
 	public Response count() {
 		return Response.ok(service.count()).build();
 	}
-	
+		
 	@GET
 	@Path("/{id}")
 	public Response findById(@PathParam("id") String id) {

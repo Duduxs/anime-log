@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.edudev.enums.AnimeStatus;
 import org.edudev.models.Anime;
 import org.edudev.models.Client;
 import org.edudev.models.dtos.AnimeDTO;
@@ -43,7 +46,20 @@ public class AnimeResource {
 	public Response count() {
 		return Response.ok(service.count()).build();
 	}
-
+	
+	@GET
+	@Path("/count/status")
+	public Response countByAnimeStatus() {
+		return Response.ok(service.countByAnimeStatus()).build();
+	}
+	
+	@GET
+	@Path("/lastEdit")
+	public Response findLastEditAnime() {
+		AnimeDTO animeDTO = service.showLastAnimeEdit();
+		return Response.ok(animeDTO).build();
+	}
+	
 	@GET
 	@Path("/{id}")
 	public Response findById(@PathParam("id") String id) {
@@ -65,6 +81,20 @@ public class AnimeResource {
 		Page<AnimeDTO> clients = service.searchByTitle(PageRequest.of(0, 10, Sort.Direction.ASC, "englishTitle"), title,
 				isMainPage);
 		return Response.ok(clients).build();
+	}
+	
+	@GET
+	@Path("/search/status")
+	public Response searchByAnimeStatus(@QueryParam("animeStatus") AnimeStatus animeStatus) {
+		Page<AnimeDTO> clients = service.searchByAnimeStatus(PageRequest.of(0, 10, Sort.Direction.ASC, "englishTitle"), animeStatus);	
+		return Response.ok(clients).build();
+	}
+	
+	@GET
+	@Path("/top3")
+	public Response getTop3Animes(@QueryParam("orderBy") String orderBy) {
+		Page<AnimeDTO> animes = service.getTop3Animes(PageRequest.of(0, 3, Sort.Direction.valueOf(orderBy), "members"));
+		return Response.ok(animes).build();
 	}
 
 	@GET
@@ -93,11 +123,33 @@ public class AnimeResource {
 				PageRequest.of(0, 20, Sort.Direction.ASC, "englishTitle"));
 		return Response.ok(animes).build();
 	}
+	
+	@PUT
+	@Path("/{id}")
+	public Response edit(@PathParam("id")String id, Anime anime) {
+		AnimeDTO animeDTO = service.edit(id, anime);
+		return Response.ok(animeDTO).build();
+	}
 
 	@POST
 	public Response save(Anime anime) {
 		AnimeDTO animeDTO = service.save(anime);
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", animeDTO.getId()).build();
 		return Response.created(uri).entity(animeDTO).build();
+	}
+	
+	@POST
+	@Path("/{user}")
+	public Response saveInUser(@PathParam("user")String user, Anime anime) {
+		AnimeDTO animeDTO = service.saveInUser(user, anime);
+		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", animeDTO.getId()).build();
+		return Response.created(uri).entity(animeDTO).build();
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public Response deleteInUser(@PathParam("id") String id) {
+		service.deleteInUser("Maria", id);
+		return Response.noContent().build();
 	}
 }

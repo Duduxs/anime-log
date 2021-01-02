@@ -2,6 +2,7 @@ package org.edudev.repositories;
 
 import java.time.LocalDateTime;
 
+import org.edudev.enums.AnimeStatus;
 import org.edudev.models.Anime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,5 +17,8 @@ public interface AnimeRepository extends JpaRepository<Anime, String>{
 	
 	@Query("FROM Anime a WHERE a.releaseDate BETWEEN :startDate and :endDate")
 	public Page<Anime> findByPagedLast20BetweenReleaseDates(@Param("startDate")LocalDateTime startDate, @Param("endDate")LocalDateTime endDate, PageRequest pageRequest);
+	
+	@Query("FROM Anime a WHERE a.status = :status")
+	public Page<Anime> findByPagedAnimeStatus(@Param("status")AnimeStatus status, PageRequest pageRequest);
 	
 }

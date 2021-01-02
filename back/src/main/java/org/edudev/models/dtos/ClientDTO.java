@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.edudev.models.Anime;
 import org.edudev.models.Commentary;
 import org.edudev.models.Friend;
 import org.edudev.models.Notification;
@@ -34,6 +35,8 @@ public class ClientDTO {
 	private Set<Notification> notifications = new HashSet<>();
 	private List<Commentary> commentaries = new ArrayList<>();
 	private Set<Friend> friends = new HashSet<>();
+	private Set<AnimeDTO> animes = new HashSet<>();
+	
 
 	public ClientDTO() {
 
@@ -132,6 +135,11 @@ public class ClientDTO {
 	public Set<Friend> getFriends() {
 		return friends;
 	}
+
+	public Set<AnimeDTO> getAnimes() {
+		return animes;
+	}
+
 
 	@Override
 	public int hashCode() {

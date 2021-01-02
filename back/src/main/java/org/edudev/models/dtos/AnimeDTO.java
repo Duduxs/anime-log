@@ -105,6 +105,7 @@ public class AnimeDTO {
 	}
 	
 	public AnimeDTO(Anime anime, String userInfo) {
+		this.id = anime.getId();
 		this.imgUrl = anime.getImgUrl();
 		this.englishTitle = anime.getEnglishTitle();
 		this.episodes = anime.getEpisodes();
@@ -121,7 +122,20 @@ public class AnimeDTO {
 		this.imgUrl = anime.getImgUrl();
 	}
 	
+	public AnimeDTO(Anime anime, Boolean putDTO) {
+		this.status = anime.getStatus();
+		this.progress = anime.getProgress();
+		this.score = anime.getScore();
+		this.lastEdit = LocalDateTime.now();
+		this.tag = anime.getTag();
+	}
 	
+	public AnimeDTO(Anime anime, Long lastAnimeEdit) {
+		this.setEnglishTitle(anime.getEnglishTitle());
+		this.setProgress(anime.getProgress());
+		this.setEpisodes(anime.getEpisodes());
+		this.setLastEdit(anime.getLastEdit());
+	}
 
 	public String getId() {
 		return id;

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 import org.edudev.enums.AnimeGenre;
 import org.edudev.enums.AnimePublic;
@@ -39,10 +40,14 @@ public class Anime implements Serializable {
 	
 	private String sinopse;
 	private Integer episodes;
-		
+	
+	@Column(unique = true)
 	private String englishTitle;
+	@Column(unique = true)
 	private String JapaneseTitle;
+	@Column(unique = true)
 	private String portugueseTitle;
+	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime releaseDate;
 	private String tvHour;
@@ -50,7 +55,7 @@ public class Anime implements Serializable {
 	
 	@ElementCollection(targetClass = AnimeGenre.class)
 	@Column(name = "genre", nullable = false)
-    @CollectionTable(name="anime_genre")
+    @CollectionTable(name="anime_genre",  joinColumns = @JoinColumn(name = "anime_id"))
 	@Enumerated(EnumType.STRING)
 	private Set<AnimeGenre> animeGenre = new HashSet<>();
 	

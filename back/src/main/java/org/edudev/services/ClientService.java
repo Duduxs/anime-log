@@ -1,6 +1,8 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,10 +12,12 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
+import org.edudev.models.Anime;
 import org.edudev.models.Client;
 import org.edudev.models.Commentary;
 import org.edudev.models.Friend;
 import org.edudev.models.Notification;
+import org.edudev.models.dtos.AnimeDTO;
 import org.edudev.models.dtos.ClientDTO;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.services.utils.Validator;
@@ -27,7 +31,7 @@ import org.springframework.data.domain.Sort;
 @Transactional
 public class ClientService {
 
-	@Inject	
+	@Inject
 	private ClientRepository repository;
 
 	private static final Logger LOG = Logger.getLogger(Client.class);
@@ -41,7 +45,7 @@ public class ClientService {
 				client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!")));
 		return clientDTO;
 	}
-	
+
 	public Long count() {
 		return repository.count();
 	}
@@ -49,15 +53,16 @@ public class ClientService {
 	public Page<ClientDTO> findAllByPaged(PageRequest pageRequest) {
 		if (repository.findAll(pageRequest).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
-		
+
 		return repository.findAll(pageRequest).map(this::toDTO);
 	}
-	
-	public List<ClientDTO> findLast10UsersOnline(){
-		if (repository.findFirst10ByOnlineOrderByLoginDesc(true).isEmpty()) 
+
+	public List<ClientDTO> findLast10UsersOnline() {
+		if (repository.findFirst10ByOnlineOrderByLoginDesc(true).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
-		
-		return repository.findFirst10ByOnlineOrderByLoginDesc(true).stream().map(this::toDTO).collect(Collectors.toList());
+
+		return repository.findFirst10ByOnlineOrderByLoginDesc(true).stream().map(this::toDTO)
+				.collect(Collectors.toList());
 	}
 
 	public Page<ClientDTO> searchByLogin(String login) {
@@ -98,8 +103,8 @@ public class ClientService {
 
 	public ClientDTO toDTO(Client client) {
 
-		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), true,  client.getPassword(),
-				client.getEnterDate(), client.getLastTimeOnline());
+		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), true,
+				client.getPassword(), client.getEnterDate(), client.getLastTimeOnline());
 
 		for (Notification not : client.getNotifications())
 			clientDTO.getNotifications().add(not);
@@ -109,6 +114,9 @@ public class ClientService {
 
 		for (Friend fri : client.getFriends())
 			clientDTO.getFriends().add(fri);
+
+		for (Anime ani : client.getAnimes())
+			clientDTO.getAnimes().add(new AnimeDTO(ani, ""));
 
 		return clientDTO;
 	}

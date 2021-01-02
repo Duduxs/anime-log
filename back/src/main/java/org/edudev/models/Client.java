@@ -55,6 +55,11 @@ public class Client implements Serializable {
 	@JsonManagedReference
 	@JoinTable(name = "client_friend_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
 	private Set<Friend> friends = new HashSet<>();
+	
+	@ManyToMany
+	@JsonManagedReference
+	@JoinTable(name = "client_anime_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientAnime_id"))
+	private Set<Anime> animes = new HashSet<>();
 
 	public Client() {
 
@@ -193,6 +198,11 @@ public class Client implements Serializable {
 	public Set<Friend> getFriends() {
 		return friends;
 	}
+	
+	public Set<Anime> getAnimes() {
+		return animes;
+	}
+
 
 	@Override
 	public String toString() {
