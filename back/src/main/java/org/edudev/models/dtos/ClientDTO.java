@@ -7,7 +7,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.edudev.models.Anime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
+
 import org.edudev.models.Commentary;
 import org.edudev.models.Friend;
 import org.edudev.models.Notification;
@@ -20,15 +24,25 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ClientDTO {
 
 	private String id = UUID.randomUUID().toString();
+	
+	@Email(message = "Por favor insira um email válido!")
+	@NotBlank(message = "Email não pode estar vazio!")
 	private String email;
+	@NotBlank(message = "Login não pode estar vazio!")
+	@Size(min = 4, max = 10,  message = "Login deve ter quatro a dez caracteres!")
 	private String login;
+	
 	private Boolean online;
+	@NotBlank(message = "Senha não pode estar vazia!")
+	@Size(min = 5, max = 10,  message = "Senha deve ter cinco a dez caracteres!")
 	private String password;
 	private String local;
 	private String imgUrl;
 	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
 	private LocalDateTime enterDate;
+	@PastOrPresent
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime lastTimeOnline;
 	

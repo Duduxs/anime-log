@@ -3,6 +3,9 @@ package org.edudev.resources;
 import java.net.URI;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -34,26 +37,29 @@ public class NotificationResource {
 	UriInfo uriInfo;
 
 	@POST
-	public Response save(Notification notification) {
+	public Response save(@Valid Notification notification) {
 		service.save(notification);
-		
+	
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", notification.getId()).build();
 		return Response.created(uri).entity(notification).build();
-	}
-	
-	@GET
-	public Response findAllPaged(
-			@QueryParam("min") Integer min, 
-			@QueryParam("max") Integer max) {
-		
-		Page<Notification> notifications = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "title"));
-		return Response.ok(notifications).build();
 	}
 	
 	@GET
 	@Path("/count")
 	public Response count() {
 		return Response.ok(service.count()).build();
+	}
+	
+	@GET
+	public Response findAllPaged(
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(30)
+			@QueryParam("max") Integer max
+			) {
+		PageRequest pageRequest =PageRequest.of(min, max, Sort.Direction.ASC, "title");
+		Page<Notification> notifications = service.findAllPaged(pageRequest);
+		return Response.ok(notifications).build();
 	}
 	
 	@DELETE

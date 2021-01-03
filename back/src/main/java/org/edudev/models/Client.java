@@ -27,6 +27,7 @@ public class Client implements Serializable {
 
 	@Id
 	private String id = UUID.randomUUID().toString();
+	
 	private String name;
 	private String local;
 	private String about;

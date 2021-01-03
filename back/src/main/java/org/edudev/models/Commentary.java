@@ -7,6 +7,10 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 public class Commentary implements Serializable {
@@ -15,12 +19,19 @@ public class Commentary implements Serializable {
 
 	@Id
 	private String id = UUID.randomUUID().toString();
-	private String imgUrl;
+	
+	@NotBlank(message = "byLogin não pode estar vazio!")
 	private String byLogin;
+	@NotBlank(message = "toLoginId não pode estar vazio!")
 	private String toLoginId;
 	
+	private String imgUrl;
+
+	@Length(min = 1, max = 12000, message = "Comentários entre 1 e 12000 caracteres permitidos!")
+	@NotBlank(message = "Description não pode estar vazia!")
 	private String description;
 	@Column(nullable = true)
+	@PastOrPresent
 	private LocalDateTime datePost;
 	
 	public Commentary() {

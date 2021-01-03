@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,8 +19,11 @@ public class Friend implements Serializable{
 	
 	@Id
 	private String id = UUID.randomUUID().toString();
+	
 	private String imgUrl;
+	@NotBlank(message = "Login não pode estar vazio!")
 	private String login;
+	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime lastTimeOnline;
 	private String local;

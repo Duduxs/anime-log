@@ -3,6 +3,9 @@ package org.edudev.resources;
 import java.net.URI;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -26,6 +29,7 @@ import org.springframework.http.MediaType;
 @Path("/commentaries")
 @Produces(MediaType.APPLICATION_JSON_VALUE)
 @Consumes(MediaType.APPLICATION_JSON_VALUE)
+@Valid
 public class CommentaryResource {
 
 	@Inject
@@ -33,6 +37,21 @@ public class CommentaryResource {
 	
 	@Context
 	UriInfo uriInfo;
+	
+	@POST
+	public Response save(@Valid Commentary commentary) {
+		service.save(commentary);
+		
+		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", commentary.getId()).build();
+		return Response.created(uri).entity(commentary).build();
+	}
+	
+	@PATCH
+	@Path("/{id}")
+	public Response update(@Valid Commentary commentary, @PathParam(value="id")String id) {
+		service.update(commentary, id);
+		return Response.noContent().build();
+	}
 	
 	@GET
 	@Path("/count")
@@ -42,28 +61,15 @@ public class CommentaryResource {
 	
 	@GET
 	public Response findAllPaged(
+			@Min(0)
 			@QueryParam("min") Integer min, 
-			@QueryParam("max") Integer max) {
-		
-		Page<Commentary> commentaries = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "datePost"));
+			@Max(30)
+			@QueryParam("max") Integer max
+			) {
+		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "datePost");
+		Page<Commentary> commentaries = service.findAllByPaged(pageRequest);
 		return Response.ok(commentaries).build();
 	}
-	
-	@POST
-	public Response save(Commentary commentary) {
-		service.save(commentary);
-		
-		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", commentary.getId()).build();
-		return Response.created(uri).entity(commentary).build();
-	}
-	
-	@PATCH
-	@Path("/{id}")
-	public Response update(Commentary commentary, @PathParam(value="id")String id) {
-		service.update(commentary, id);
-		return Response.noContent().build();
-	}
-
 
 	@DELETE
 	@Path("/{id}")

@@ -20,5 +20,5 @@ public interface AnimeRepository extends JpaRepository<Anime, String>{
 	
 	@Query("FROM Anime a WHERE a.status = :status")
 	public Page<Anime> findByPagedAnimeStatus(@Param("status")AnimeStatus status, PageRequest pageRequest);
-	
+		
 }

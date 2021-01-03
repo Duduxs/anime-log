@@ -1,7 +1,7 @@
 package org.edudev.enums;
 
 public enum AnimeGenre {
-
+	
 	SHONEN,
 	SHOUJO,
 	SEINEN,

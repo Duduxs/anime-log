@@ -1,8 +1,6 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,12 +18,9 @@ import org.edudev.models.Notification;
 import org.edudev.models.dtos.AnimeDTO;
 import org.edudev.models.dtos.ClientDTO;
 import org.edudev.repositories.ClientRepository;
-import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
-import org.jboss.logging.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 @ApplicationScoped
 @Transactional
@@ -34,20 +29,31 @@ public class ClientService {
 	@Inject
 	private ClientRepository repository;
 
-	private static final Logger LOG = Logger.getLogger(Client.class);
 
-	@Inject
-	private Validator validator;
+	public ClientDTO save(ClientDTO clientDTO) {
+		if (repository.findByLogin(clientDTO.getLogin()) != null)
+			WebError.sendError(Response.Status.CONFLICT, "Login já existe");
+		if (repository.findByEmail(clientDTO.getEmail()) != null)
+			WebError.sendError(Response.Status.CONFLICT, "Email já existe");
+		
+		repository.save(fromDTO(clientDTO));
+		return clientDTO;
+	}
+	
+	public ClientDTO login(String login, String password) {
+		Optional<Client> client = repository.findByLoginAndPassword(login, password);
+		return toDTO(client.orElseThrow(() -> WebError.returnError(Response.Status.UNAUTHORIZED, "")));
+	}
 
+	public Long count() {
+		return repository.count();
+	}
+	
 	public ClientDTO findById(String id) {
 		Optional<Client> client = repository.findById(id);
 		ClientDTO clientDTO = toDTO(
 				client.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!")));
 		return clientDTO;
-	}
-
-	public Long count() {
-		return repository.count();
 	}
 
 	public Page<ClientDTO> findAllByPaged(PageRequest pageRequest) {
@@ -57,7 +63,7 @@ public class ClientService {
 		return repository.findAll(pageRequest).map(this::toDTO);
 	}
 
-	public List<ClientDTO> findLast10UsersOnline() {
+	public List<ClientDTO> findLast10Online() {
 		if (repository.findFirst10ByOnlineOrderByLoginDesc(true).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 
@@ -65,24 +71,11 @@ public class ClientService {
 				.collect(Collectors.toList());
 	}
 
-	public Page<ClientDTO> searchByLogin(String login) {
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "login");
-
+	public Page<ClientDTO> searchByLoginPaged(PageRequest pageRequest, String login) {
 		if (repository.findByPagedLogin(login, pageRequest).isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 
 		return repository.findByPagedLogin(login, pageRequest).map(this::toDTO);
-	}
-
-	public ClientDTO login(String login, String password) {
-		Optional<Client> client = repository.findByLoginAndPassword(login, password);
-		return toDTO(client.orElseThrow(() -> WebError.returnError(Response.Status.UNAUTHORIZED, "")));
-	}
-
-	public ClientDTO save(ClientDTO clientDTO) {
-		validator.validateDTO(clientDTO);
-		repository.save(fromDTO(clientDTO));
-		return clientDTO;
 	}
 
 	public Client fromDTO(ClientDTO clientDTO) {

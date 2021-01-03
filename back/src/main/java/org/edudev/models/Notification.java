@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 public class Notification implements Serializable {
@@ -13,10 +16,19 @@ public class Notification implements Serializable {
 
 	@Id
 	private String id = UUID.randomUUID().toString();
+	
+	@NotBlank(message = "byLogin não pode estar vazio!")
 	private String byLogin;
+	@NotBlank(message = "toLoginId não pode estar vazio!")
 	private String toLoginId;
+	
 	private String imgUrl;
+	
+	@NotBlank(message = "Título não pode estar vazio!")
+	@Length(min = 5, max = 20, message = "Títulos entre 5 e 20 caracteres permitidos!")
 	private String title;
+	@NotBlank(message = "Mensagem não pode estar vazio!")
+	@Length(min = 10, max = 50, message = "Mensagens entre 10 e 50 caracteres permitidas!")
 	private String message;
 
 	public Notification() {

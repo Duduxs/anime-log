@@ -19,5 +19,6 @@ public interface ClientRepository extends JpaRepository<Client, String>{
 	public Page<Client> findByPagedLogin(@Param("login")String login, PageRequest pageRequest);
 
 	public List<Client> findFirst10ByOnlineOrderByLoginDesc(Boolean online);
+	
 	public Optional<Client> findByLoginAndPassword(String login, String password);
 }

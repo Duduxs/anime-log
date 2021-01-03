@@ -14,11 +14,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.edudev.enums.AnimeGenre;
 import org.edudev.enums.AnimePublic;
 import org.edudev.enums.AnimeScore;
 import org.edudev.enums.AnimeStatus;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -30,6 +34,7 @@ public class Anime implements Serializable {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	
+	@PositiveOrZero
 	private Integer members;
 	
 	private String author;
@@ -41,11 +46,8 @@ public class Anime implements Serializable {
 	private String sinopse;
 	private Integer episodes;
 	
-	@Column(unique = true)
 	private String englishTitle;
-	@Column(unique = true)
 	private String JapaneseTitle;
-	@Column(unique = true)
 	private String portugueseTitle;
 	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -57,11 +59,14 @@ public class Anime implements Serializable {
 	@Column(name = "genre", nullable = false)
     @CollectionTable(name="anime_genre",  joinColumns = @JoinColumn(name = "anime_id"))
 	@Enumerated(EnumType.STRING)
+	@NotEmpty(message = "Gêneros não podem estar vazios!")
 	private Set<AnimeGenre> animeGenre = new HashSet<>();
 	
 	private AnimePublic animePublic;
 	
+	@Range(min = 0, max = 5000)
 	private Integer progress;
+	@Length(min = 0, max = 10000)
 	private String tag;
 	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")

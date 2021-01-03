@@ -3,6 +3,9 @@ package org.edudev.resources;
 import java.net.URI;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -33,6 +36,15 @@ public class FriendResource {
 	@Context
 	UriInfo uriInfo;
 	
+	@POST
+	@Path("/{login}")
+	public Response save(@PathParam(value="login")String login,@Valid Friend friend) {
+		Friend f = service.save(login, friend);
+		
+		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", friend.getId()).build();
+		return Response.created(uri).entity(f).build();
+	}
+	
 	@GET
 	@Path("/count")
 	public Response count() {
@@ -41,27 +53,22 @@ public class FriendResource {
 	
 	@GET
 	public Response findAllPaged(
+			@Min(0)
 			@QueryParam("min") Integer min, 
-			@QueryParam("max") Integer max) {
-		
-		Page<Friend> notifications = service.findAllByPaged(PageRequest.of(min, max, Sort.Direction.ASC, "login"));
+			@Max(30)
+			@QueryParam("max") Integer max
+			) {
+		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "login");
+		Page<Friend> notifications = service.findAllPaged(pageRequest);
 		return Response.ok(notifications).build();
 	}
 	
 	@GET
 	@Path("/search")
-	public Response searchByLogin(@QueryParam("login") String login) {
-		Page<Friend> friends = service.searchByLogin(login);
+	public Response searchByLoginPaged(@QueryParam("login") String login) {
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "login");
+		Page<Friend> friends = service.searchByLoginPaged(pageRequest, login);
 		return Response.ok(friends).build();
-	}
-	
-	@POST
-	@Path("/{login}")
-	public Response save(@PathParam(value="login")String login, Friend friend) {
-		Friend f = service.save(login, friend);
-		
-		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", friend.getId()).build();
-		return Response.created(uri).entity(f).build();
 	}
 	
 	@DELETE

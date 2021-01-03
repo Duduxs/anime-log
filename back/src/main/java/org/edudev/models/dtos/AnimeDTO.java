@@ -33,6 +33,7 @@ public class AnimeDTO {
 	private String englishTitle;
 	private String japaneseTitle;
 	private String portugueseTitle;
+	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime releaseDate;
 	private String tvHour;
