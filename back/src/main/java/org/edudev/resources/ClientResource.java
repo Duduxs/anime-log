@@ -3,8 +3,6 @@ package org.edudev.resources;
 import java.net.URI;
 import java.util.List;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -22,7 +20,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.edudev.models.dtos.ClientDTO;
 import org.edudev.services.ClientService;
-import org.edudev.services.utils.TokenUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,33 +32,27 @@ public class ClientResource {
 
 	@Inject
 	private ClientService service;
-	
+
 	@Context
 	UriInfo uriInfo;
-	
 
 	@POST
-	public Response save(@Valid ClientDTO clientDTO) throws Exception {
+	public Response save(@Valid ClientDTO clientDTO) {
 		service.save(clientDTO);
 
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", clientDTO.getId()).build();
-		return Response.created(uri).entity(TokenUtils.generateTokenString("/JWTFuncionarioClaims.json", null)).build();
+		return Response.created(uri).entity(clientDTO).build();
 	}
-	
-	@PermitAll
+
 	@GET
 	@Path("/login")
-	public Response login(
-			@QueryParam("username") String username,
-			@QueryParam("password") String password
-			) {
+	public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
 		service.login(username, password);
 		return Response.ok().build();
 	}
 
 	@GET
 	@Path("/count")
-	@RolesAllowed("admin")
 	public Response count() {
 		return Response.ok(service.count()).build();
 	}
@@ -75,10 +66,8 @@ public class ClientResource {
 
 	@GET
 	public Response findAllPaged(
-			@Min(0)
-			@QueryParam("min") Integer min, 
-			@Max(30)
-			@QueryParam("max") Integer max
+			@Min(0) @QueryParam("min") Integer min, 
+			@Max(2000) @QueryParam("max") Integer max
 			) {
 		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "login");
 		Page<ClientDTO> clients = service.findAllByPaged(pageRequest);
@@ -94,8 +83,13 @@ public class ClientResource {
 
 	@GET
 	@Path("/search")
-	public Response searchByLoginPaged(@QueryParam("login") String login) {
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "login");
+	public Response searchByLoginPaged(
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(2000)
+			@QueryParam("max") Integer max,
+			@QueryParam("login") String login) {
+		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "login");
 		Page<ClientDTO> clients = service.searchByLoginPaged(pageRequest, login);
 		return Response.ok(clients).build();
 	}

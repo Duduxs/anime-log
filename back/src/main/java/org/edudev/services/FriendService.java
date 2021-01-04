@@ -26,12 +26,9 @@ public class FriendService {
 	private ClientRepository clientRepository;
 
 	public Friend save(String login, Friend friend) {
-		
+		//Melhorar...
 		Client client = Optional.ofNullable(clientRepository.findByLogin(login)).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!"));
 		Client clientFriend = Optional.ofNullable(clientRepository.findByLogin(friend.getLogin())).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário destinatário não encontrado!"));
-		
-		if(client.getLogin().equals(clientFriend.getLogin()))
-			WebError.sendError(Response.Status.BAD_REQUEST, "Você não pode ser amigo de você mesmo!");
 		
 		repository.save(friend);
 		client.getFriends().add(friend);
@@ -51,34 +48,21 @@ public class FriendService {
 	}
 	
 	public Page<Friend> findAllPaged(PageRequest pageRequest) {
-		if (repository.findAll(pageRequest).isEmpty())
+		Page<Friend> friends = repository.findAll(pageRequest);
+		
+		if (friends.isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 
-		return repository.findAll(pageRequest);
+		return friends;
 	}
 
 	public Page<Friend> searchByLoginPaged(PageRequest pageRequest, String login) {
-		if (repository.findByPagedLogin(login, pageRequest).isEmpty())
+		Page<Friend> friends = repository.findByPagedLogin(login, pageRequest);
+		
+		if (friends.isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 
 		return repository.findByPagedLogin(login, pageRequest);
 	}
 
-	public void deleteByLogin(String login) {
-		//temporary
-		Client client = Optional.ofNullable(clientRepository.findByLogin("Maria")).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!"));
-		Friend friend = Optional.ofNullable(repository.findByLogin(login)).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário destinatário não encontrado!")); 
-	
-		client.getFriends().remove(friend);
-		clientRepository.saveAndFlush(client);
-		repository.delete(friend);
-		
-		Client clientFriend = clientRepository.findByLogin("Eduardo");
-		Friend f = repository.findByLogin("Maria");
-		
-		clientFriend.getFriends().remove(f);
-		clientRepository.saveAndFlush(clientFriend);
-		repository.delete(f);
-
-	}
 }

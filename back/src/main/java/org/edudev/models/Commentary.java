@@ -7,10 +7,13 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Commentary implements Serializable {
@@ -19,33 +22,29 @@ public class Commentary implements Serializable {
 
 	@Id
 	private String id = UUID.randomUUID().toString();
+	private Client by;
+	@ManyToOne
+	private Client to;
 	
-	@NotBlank(message = "byLogin não pode estar vazio!")
-	private String byLogin;
-	@NotBlank(message = "toLoginId não pode estar vazio!")
-	private String toLoginId;
-	
-	private String imgUrl;
-
 	@Length(min = 1, max = 12000, message = "Comentários entre 1 e 12000 caracteres permitidos!")
 	@NotBlank(message = "Description não pode estar vazia!")
 	private String description;
 	@Column(nullable = true)
 	@PastOrPresent
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime datePost;
 	
 	public Commentary() {
 
 	}
 
-	public Commentary(String id, String imgUrl, String byLogin, String description, LocalDateTime datePost) {
+	public Commentary(String id, String imgUrl, Client by, String description, LocalDateTime datePost) {
 		this.id = id;
-		this.imgUrl = imgUrl;
-		this.byLogin = byLogin;
+		this.by = by;
 		this.description = description;
 		this.datePost = datePost;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -54,20 +53,12 @@ public class Commentary implements Serializable {
 		this.id = id;
 	}
 
-	public String getImgUrl() {
-		return imgUrl;
+	public Client getBy() {
+		return by;
 	}
 
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
-
-	public String getByLogin() {
-		return byLogin;
-	}
-
-	public void setByLogin(String byLogin) {
-		this.byLogin = byLogin;
+	public void setBy(Client by) {
+		this.by = by;
 	}
 
 	public String getDescription() {
@@ -86,12 +77,12 @@ public class Commentary implements Serializable {
 		this.datePost = datePost;
 	}
 	
-	public String getToLoginId() {
-		return toLoginId;
+	public Client getTo() {
+		return to;
 	}
 
-	public void setToLoginId(String toLoginId) {
-		this.toLoginId = toLoginId;
+	public void setTo(Client to) {
+		this.to = to;
 	}
 
 	@Override

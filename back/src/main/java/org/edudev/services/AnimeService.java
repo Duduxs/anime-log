@@ -1,7 +1,9 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -16,6 +18,7 @@ import org.edudev.repositories.AnimeRepository;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.services.utils.WebError;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @ApplicationScoped
@@ -28,43 +31,70 @@ public class AnimeService {
 	@Inject
 	private ClientRepository clientRepository;
 
+
 	public AnimeDTO save(Anime anime) {
+		anime.setEnterDate(LocalDateTime.now());
 		repository.save(anime);
 		return toDTO(anime);
 	}
 
-	public AnimeDTO saveInUser(String user, Anime anime) {
-		repository.save(anime);
+	public AnimeDTO saveInUser(String login, Anime entity) {
 
-		Client client = clientRepository.findByLogin(user);
+		Client client = Optional.ofNullable(clientRepository.findByLogin(login)).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário não encontrado!"));
+		Anime anime = Optional.ofNullable(repository.getOne(entity.getId())).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Anime não encontrado!"));
+		
+		anime.setTag(entity.getTag());
+		anime.setProgress(entity.getProgress());
+		anime.setLastEdit(entity.getLastEdit());
+		anime.setStatus(entity.getStatus());
+		anime.setScore(entity.getScore());
+		anime.addMembers(1);
+		
+		repository.save(anime);
+		
 		client.getAnimes().add(anime);
-	
 		clientRepository.save(client);
+		
 		return toDTOUser(anime);
 	}
 
-	public AnimeDTO editInUser(String id, Anime anime) {
-		Anime entity = repository.getOne(id);
-		return toDTOPut(entity, anime);
+	public AnimeDTO editInUser(String login, Anime entity) {
+		repository.findById(entity.getId()).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Anime não encontrado!"));
+		
+		Client client = Optional.ofNullable(clientRepository.findByLogin(login)).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário não encontrado!"));
+		Anime anime = client.getAnimes().stream().filter(a -> a.getId().equals(entity.getId())).findFirst().orElseThrow(() -> WebError.returnError(Response.Status.BAD_REQUEST, "Usuário não tem esse anime!"));
+		
+		anime.setStatus(entity.getStatus());
+		anime.setProgress(entity.getProgress());
+		anime.setScore(entity.getScore());
+		anime.setLastEdit(LocalDateTime.now());
+		anime.setTag(entity.getTag());
+
+		repository.save(anime);
+		
+		return toDTOPut(entity);
 	}
 
-	public void deleteInUser(String user, String id) {
-		Client client = clientRepository.findByLogin(user);
-		Anime anime = repository.getOne(id);
+	public void deleteInUser(String login, Anime entity) {
+		Client client = Optional.ofNullable(clientRepository.findByLogin(login))
+				.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário não encontrado!"));
+		
+		Anime anime = repository.getOne(entity.getId());
 
 		client.getAnimes().remove(anime);
+		anime.getAnimeGenre().clear();
+		
 		clientRepository.saveAndFlush(client);
 
-		anime.getAnimeGenre().clear();
-		repository.deleteById(id);
+	
 	}
 
 	public Long count() {
 		return repository.count();
 	}
 
-	public Long[] countByStatus() {
-		Client client = clientRepository.findByLogin("Maria");
+	public Long[] countByStatus(String login) {
+		Client client = clientRepository.findByLogin(login);
 		// Assistindo, Completados, Aguardando, Dropados, Pensando_em_assistir
 		Long status[] = { 0L, 0L, 0L, 0L, 0L };
 
@@ -95,8 +125,8 @@ public class AnimeService {
 		return toDTO(anime.get());
 	}
 
-	public AnimeDTO findLastAnimeEdit() {
-		Client c = clientRepository.findByLogin("Maria");
+	public AnimeDTO findLastAnimeEdit(String login) {
+		Client c = Optional.ofNullable(clientRepository.findByLogin(login)).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário não encontrado!"));
 
 		LocalDateTime newestDate = c.getAnimes().stream().map(Anime::getLastEdit).max(LocalDateTime::compareTo).get();
 		Anime clientAnime = c.getAnimes().stream().filter(ca -> ca.getLastEdit().equals(newestDate)).findFirst().get();
@@ -155,8 +185,13 @@ public class AnimeService {
 		return animes.map(this::toDTOUser);
 	}
 
-	public Page<AnimeDTO> searchByStatusPaged(PageRequest pageRequest, AnimeStatus animeStatus) {
-		Page<Anime> animes = repository.findByPagedAnimeStatus(animeStatus, pageRequest);
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Page<AnimeDTO> searchByStatusPaged(String login, PageRequest pageRequest, AnimeStatus status) {
+		Client c = Optional.ofNullable(clientRepository.findByLogin(login)).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário não encontrado!"));
+		
+		List<Anime> entities = c.getAnimes().stream().filter(a -> a.getStatus().equals(status)).collect(Collectors.toList());
+		Page<Anime> animes = new PageImpl(entities, pageRequest, entities.size());
 
 		if (animes.isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
@@ -176,15 +211,7 @@ public class AnimeService {
 		return new AnimeDTO(anime, 0);
 	}
 
-	public AnimeDTO toDTOPut(Anime entity, Anime anime) {
-		entity.setStatus(anime.getStatus());
-		entity.setProgress(anime.getProgress());
-		entity.setScore(anime.getScore());
-		entity.setLastEdit(LocalDateTime.now());
-		entity.setTag(anime.getTag());
-
-		repository.save(entity);
-
+	public AnimeDTO toDTOPut(Anime entity) {
 		return new AnimeDTO(entity, true);
 	}
 

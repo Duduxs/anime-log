@@ -12,9 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
-import org.edudev.models.Commentary;
 import org.edudev.models.Friend;
-import org.edudev.models.Notification;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,10 +30,10 @@ public class ClientDTO {
 	@Size(min = 4, max = 10,  message = "Login deve ter quatro a dez caracteres!")
 	private String login;
 	
-	private Boolean online;
 	@NotBlank(message = "Senha não pode estar vazia!")
 	@Size(min = 5, max = 10,  message = "Senha deve ter cinco a dez caracteres!")
 	private String password;
+	private Boolean online;
 	private String local;
 	private String imgUrl;
 	
@@ -46,8 +44,8 @@ public class ClientDTO {
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime lastTimeOnline;
 	
-	private Set<Notification> notifications = new HashSet<>();
-	private List<Commentary> commentaries = new ArrayList<>();
+	private Set<NotificationDTO> notifications = new HashSet<>();
+	private List<CommentaryDTO> commentaries = new ArrayList<>();
 	private Set<Friend> friends = new HashSet<>();
 	private Set<AnimeDTO> animes = new HashSet<>();
 	
@@ -56,13 +54,15 @@ public class ClientDTO {
 
 	}
 
-	public ClientDTO(String id, String email, String login, Boolean online, String password, LocalDateTime enterDate, LocalDateTime lastTimeOnline) {
+	public ClientDTO(String id, String email, String login, String password, Boolean online, LocalDateTime enterDate, String imgUrl, String local, LocalDateTime lastTimeOnline) {
 		this.id = id;
 		this.email = email;
 		this.login = login;
-		this.online = online;
 		this.password = password;
+		this.online = online;
 		this.enterDate = enterDate;
+		this.imgUrl = imgUrl;
+		this.local = local;
 		this.lastTimeOnline = lastTimeOnline;
 	}
 
@@ -90,14 +90,6 @@ public class ClientDTO {
 		this.login = login;
 	}
 	
-	public Boolean getOnline() {
-		return online;
-	}
-
-	public void setOnline(Boolean online) {
-		this.online = online;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -106,6 +98,14 @@ public class ClientDTO {
 		this.password = password;
 	}
 	
+	public Boolean getOnline() {
+		return online;
+	}
+
+	public void setOnline(Boolean online) {
+		this.online = online;
+	}
+
 	public String getLocal() {
 		return local;
 	}
@@ -138,11 +138,11 @@ public class ClientDTO {
 		this.lastTimeOnline = lastTimeOnline;
 	}
 
-	public Set<Notification> getNotifications() {
+	public Set<NotificationDTO> getNotifications() {
 		return notifications;
 	}
 	
-	public List<Commentary> getCommentaries() {
+	public List<CommentaryDTO> getCommentaries() {
 		return commentaries;
 	}
 	

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,10 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.PastOrPresent;
 
 import org.edudev.enums.Genre;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Client implements Serializable {
@@ -41,24 +43,27 @@ public class Client implements Serializable {
 	private String login;
 	private String password;
 	private Boolean online;
-
-	private LocalDateTime birthdate;
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
+	private LocalDateTime birthdate;	
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
 	private LocalDateTime lastTimeOnline;
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
 	private LocalDateTime enterDate;
 
-	@OneToMany(mappedBy = "toLoginId")
+	@OneToMany(mappedBy = "to")
 	private Set<Notification> notifications = new HashSet<>();
 
-	@OneToMany(mappedBy = "toLoginId")
+	@OneToMany(mappedBy = "to")
 	private List<Commentary> commentaries = new ArrayList<>();
 
-	@ManyToMany
-	@JsonManagedReference
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "client_friend_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
 	private Set<Friend> friends = new HashSet<>();
 	
-	@ManyToMany
-	@JsonManagedReference
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "client_anime_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientAnime_id"))
 	private Set<Anime> animes = new HashSet<>();
 

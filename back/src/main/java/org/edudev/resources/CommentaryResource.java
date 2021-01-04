@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.edudev.models.Commentary;
+import org.edudev.models.dtos.CommentaryDTO;
 import org.edudev.services.CommentaryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +30,6 @@ import org.springframework.http.MediaType;
 @Path("/commentaries")
 @Produces(MediaType.APPLICATION_JSON_VALUE)
 @Consumes(MediaType.APPLICATION_JSON_VALUE)
-@Valid
 public class CommentaryResource {
 
 	@Inject
@@ -40,17 +40,17 @@ public class CommentaryResource {
 	
 	@POST
 	public Response save(@Valid Commentary commentary) {
-		service.save(commentary);
+		CommentaryDTO entity = service.save(commentary);
 		
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", commentary.getId()).build();
-		return Response.created(uri).entity(commentary).build();
+		return Response.created(uri).entity(entity).build();
 	}
 	
 	@PATCH
 	@Path("/{id}")
 	public Response update(@Valid Commentary commentary, @PathParam(value="id")String id) {
-		service.update(commentary, id);
-		return Response.noContent().build();
+		CommentaryDTO entity = service.update(commentary, id);
+		return Response.ok(entity).build();
 	}
 	
 	@GET
@@ -63,11 +63,25 @@ public class CommentaryResource {
 	public Response findAllPaged(
 			@Min(0)
 			@QueryParam("min") Integer min, 
-			@Max(30)
+			@Max(2000)
 			@QueryParam("max") Integer max
 			) {
 		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "datePost");
-		Page<Commentary> commentaries = service.findAllByPaged(pageRequest);
+		Page<CommentaryDTO> commentaries = service.findAllByPaged(pageRequest);
+		return Response.ok(commentaries).build();
+	}
+	
+	@GET
+	@Path("/user")
+	public Response findAllByUserIdPaged(
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(2000)
+			@QueryParam("max") Integer max,
+			@QueryParam("id") String id
+			) {
+		PageRequest pageRequest =PageRequest.of(min, max, Sort.Direction.ASC, "datePost");
+		Page<CommentaryDTO> commentaries = service.findAllByUserIdPaged(pageRequest, id);
 		return Response.ok(commentaries).build();
 	}
 
@@ -75,12 +89,6 @@ public class CommentaryResource {
 	@Path("/{id}")
 	public Response deleteById(@PathParam(value="id")String id) {
 		service.deleteById(id);
-		return Response.ok().build();
-	}
-	
-	@DELETE
-	public Response deleteAll() {
-		service.deleteAll();
-		return Response.ok().build();
+		return Response.noContent().build();
 	}
 }

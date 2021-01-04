@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -55,7 +54,7 @@ public class FriendResource {
 	public Response findAllPaged(
 			@Min(0)
 			@QueryParam("min") Integer min, 
-			@Max(30)
+			@Max(2000)
 			@QueryParam("max") Integer max
 			) {
 		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "login");
@@ -65,17 +64,16 @@ public class FriendResource {
 	
 	@GET
 	@Path("/search")
-	public Response searchByLoginPaged(@QueryParam("login") String login) {
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "login");
+	public Response searchByLoginPaged(
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(2000)
+			@QueryParam("max") Integer max,
+			@QueryParam("login") String login) {
+		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "login");
 		Page<Friend> friends = service.searchByLoginPaged(pageRequest, login);
 		return Response.ok(friends).build();
 	}
-	
-	@DELETE
-	@Path("/{login}")
-	public Response deleteByLogin(@PathParam(value="login")String login) {
-		service.deleteByLogin(login);
-		return Response.ok().build();
-	}
+
 	
 }

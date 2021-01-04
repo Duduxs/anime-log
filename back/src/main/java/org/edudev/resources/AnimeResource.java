@@ -48,9 +48,9 @@ public class AnimeResource {
 	}
 
 	@POST
-	@Path("/{user}")
-	public Response saveInUser(@PathParam("user") String user, @Valid Anime anime) {
-		AnimeDTO animeDTO = service.saveInUser(user, anime);
+	@Path("/{login}")
+	public Response saveInUser(@PathParam("login") String login, @Valid Anime anime) {
+		AnimeDTO animeDTO = service.saveInUser(login, anime);
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", animeDTO.getId()).build();
 		return Response.created(uri).entity(animeDTO).build();
 	}
@@ -63,9 +63,9 @@ public class AnimeResource {
 	}
 
 	@DELETE
-	@Path("/{id}")
-	public Response deleteInUser(@PathParam("id") String id) {
-		service.deleteInUser("Maria", id);
+	@Path("/{login}")
+	public Response deleteInUser(@PathParam("login") String login, @Valid Anime anime) {
+		service.deleteInUser(login, anime);
 		return Response.noContent().build();
 	}
 
@@ -76,9 +76,9 @@ public class AnimeResource {
 	}
 
 	@GET
-	@Path("/count/status")
-	public Response countByStatus() {
-		return Response.ok(service.countByStatus()).build();
+	@Path("/count/status/{login}")
+	public Response countByStatus(@PathParam("login") String login) {
+		return Response.ok(service.countByStatus(login)).build();
 	}
 
 	@GET
@@ -89,9 +89,9 @@ public class AnimeResource {
 	}
 	
 	@GET
-	@Path("/lastEdit")
-	public Response findLastEditAnime() {
-		AnimeDTO animeDTO = service.findLastAnimeEdit();
+	@Path("/lastEdit/{login}")
+	public Response findLastEditAnime(@PathParam("login") String login) {
+		AnimeDTO animeDTO = service.findLastAnimeEdit(login);
 		return Response.ok(animeDTO).build();
 	}
 
@@ -99,7 +99,7 @@ public class AnimeResource {
 	public Response findAllPaged(
 			@Min(0)
 			@QueryParam("min") Integer min, 
-			@Max(30)
+			@Max(2000)
 			@QueryParam("max") Integer max,
 			@QueryParam("isUser") String isUser
 			) {
@@ -149,19 +149,29 @@ public class AnimeResource {
 	@GET
 	@Path("/search")
 	public Response searchByTitlePaged(
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(2000)
+			@QueryParam("max") Integer max,
 			@QueryParam("title") String title, 
 			@QueryParam("isMainPage") String isMainPage
 			) {
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "englishTitle");
+		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "englishTitle");
 		Page<AnimeDTO> clients = service.searchByTitlePaged(pageRequest, title, isMainPage);
 		return Response.ok(clients).build();
 	}
 
 	@GET
-	@Path("/search/status")
-	public Response searchByStatusPaged(@QueryParam("status") AnimeStatus status) {
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "englishTitle");
-		Page<AnimeDTO> clients = service.searchByStatusPaged(pageRequest, status);
+	@Path("/search/status/{login}")
+	public Response searchByStatusPaged(
+			@PathParam("login")String login, 
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(2000)
+			@QueryParam("max") Integer max,
+			@QueryParam("status") AnimeStatus status) {
+		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "englishTitle");
+		Page<AnimeDTO> clients = service.searchByStatusPaged(login, pageRequest, status);
 		return Response.ok(clients).build();
 	}
 	

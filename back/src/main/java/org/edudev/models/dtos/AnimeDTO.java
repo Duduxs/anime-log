@@ -48,7 +48,7 @@ public class AnimeDTO {
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime lastEdit;
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-	private LocalDateTime enterDate = LocalDateTime.now();
+	private LocalDateTime enterDate;
 
 	private AnimeStatus status;
 	private AnimeScore score;
@@ -106,6 +106,7 @@ public class AnimeDTO {
 	}
 	
 	public AnimeDTO(Anime anime, String userInfo) {
+		this.members = anime.getMembers();
 		this.id = anime.getId();
 		this.imgUrl = anime.getImgUrl();
 		this.englishTitle = anime.getEnglishTitle();

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
@@ -17,13 +18,10 @@ public class Notification implements Serializable {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	
-	@NotBlank(message = "byLogin não pode estar vazio!")
-	private String byLogin;
-	@NotBlank(message = "toLoginId não pode estar vazio!")
-	private String toLoginId;
-	
-	private String imgUrl;
-	
+	private Client by;
+	@ManyToOne
+	private Client to;
+		
 	@NotBlank(message = "Título não pode estar vazio!")
 	@Length(min = 5, max = 20, message = "Títulos entre 5 e 20 caracteres permitidos!")
 	private String title;
@@ -35,16 +33,15 @@ public class Notification implements Serializable {
 
 	}
 
-	public Notification(String id, String imgUrl, String sourceUser, String title, String message, String byLogin,
-			String toLoginId) {
+	public Notification(String id, String imgUrl, String sourceUser, String title, String message, Client by,
+			Client to) {
 		this.id = id;
-		this.imgUrl = imgUrl;
-		this.byLogin = byLogin;
+		this.by = by;
 		this.title = title;
 		this.message = message;
-		this.toLoginId = toLoginId;
+		this.to = to;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -53,28 +50,20 @@ public class Notification implements Serializable {
 		this.id = id;
 	}
 
-	public String getImgUrl() {
-		return imgUrl;
+	public Client getBy() {
+		return by;
 	}
 
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
+	public void setBy(Client by) {
+		this.by = by;
 	}
 
-	public String getByLogin() {
-		return byLogin;
+	public Client getTo() {
+		return to;
 	}
 
-	public void setByLogin(String byLogin) {
-		this.byLogin = byLogin;
-	}
-
-	public String getToLoginId() {
-		return toLoginId;
-	}
-
-	public void setToLoginId(String toLoginId) {
-		this.toLoginId = toLoginId;
+	public void setTo(Client to) {
+		this.to = to;
 	}
 
 	public String getTitle() {

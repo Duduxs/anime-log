@@ -1,6 +1,7 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,11 +13,11 @@ import javax.ws.rs.core.Response;
 
 import org.edudev.models.Anime;
 import org.edudev.models.Client;
-import org.edudev.models.Commentary;
 import org.edudev.models.Friend;
-import org.edudev.models.Notification;
 import org.edudev.models.dtos.AnimeDTO;
 import org.edudev.models.dtos.ClientDTO;
+import org.edudev.models.dtos.CommentaryDTO;
+import org.edudev.models.dtos.NotificationDTO;
 import org.edudev.repositories.ClientRepository;
 import org.edudev.services.utils.WebError;
 import org.springframework.data.domain.Page;
@@ -41,8 +42,10 @@ public class ClientService {
 	}
 	
 	public ClientDTO login(String login, String password) {
-		Optional<Client> client = repository.findByLoginAndPassword(login, password);
-		return toDTO(client.orElseThrow(() -> WebError.returnError(Response.Status.UNAUTHORIZED, "")));
+		Client client = repository.findByLoginAndPassword(login, password).orElseThrow(() -> WebError.returnError(Response.Status.UNAUTHORIZED, ""));
+		client.setLastTimeOnline(LocalDateTime.now());
+		client.setOnline(true);
+		return toDTO(client);
 	}
 
 	public Long count() {
@@ -86,25 +89,30 @@ public class ClientService {
 		c.setPassword(clientDTO.getPassword());
 		c.setEnterDate(LocalDateTime.now());
 		c.setLastTimeOnline(LocalDateTime.now());
-		c.setOnline(true);
-
+		
 		clientDTO.setId(c.getId());
 		clientDTO.setEnterDate(LocalDateTime.now());
 		clientDTO.setLastTimeOnline(LocalDateTime.now());
+		
 		return c;
 	}
 
 	public ClientDTO toDTO(Client client) {
 
-		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), true,
-				client.getPassword(), client.getEnterDate(), client.getLastTimeOnline());
+		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), client.getPassword(), client.getOnline(), client.getEnterDate(), client.getImgUrl(), client.getLocal(), client.getLastTimeOnline());
 
-		for (Notification not : client.getNotifications())
+		List<NotificationDTO> notificationsDTO = new ArrayList<>();
+		client.getNotifications().forEach(n -> notificationsDTO.add(new NotificationDTO(n)));
+		
+		for (NotificationDTO not : notificationsDTO)
 			clientDTO.getNotifications().add(not);
 
-		for (Commentary com : client.getCommentaries())
+		List<CommentaryDTO> commentariesDTO = new ArrayList<>();
+		client.getCommentaries().forEach(c -> commentariesDTO.add(new CommentaryDTO(c)));
+		
+		for (CommentaryDTO com : commentariesDTO)
 			clientDTO.getCommentaries().add(com);
-
+		
 		for (Friend fri : client.getFriends())
 			clientDTO.getFriends().add(fri);
 

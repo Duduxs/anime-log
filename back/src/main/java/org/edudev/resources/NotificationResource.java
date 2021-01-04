@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.edudev.models.Notification;
+import org.edudev.models.dtos.NotificationDTO;
 import org.edudev.services.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,10 +39,10 @@ public class NotificationResource {
 
 	@POST
 	public Response save(@Valid Notification notification) {
-		service.save(notification);
+		NotificationDTO entity = service.save(notification);
 	
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", notification.getId()).build();
-		return Response.created(uri).entity(notification).build();
+		return Response.created(uri).entity(entity).build();
 	}
 	
 	@GET
@@ -54,11 +55,25 @@ public class NotificationResource {
 	public Response findAllPaged(
 			@Min(0)
 			@QueryParam("min") Integer min, 
-			@Max(30)
+			@Max(2000)
 			@QueryParam("max") Integer max
 			) {
 		PageRequest pageRequest =PageRequest.of(min, max, Sort.Direction.ASC, "title");
-		Page<Notification> notifications = service.findAllPaged(pageRequest);
+		Page<NotificationDTO> notifications = service.findAllPaged(pageRequest);
+		return Response.ok(notifications).build();
+	}
+	
+	@GET
+	@Path("/user")
+	public Response findAllByUserIdPaged(
+			@Min(0)
+			@QueryParam("min") Integer min, 
+			@Max(2000)
+			@QueryParam("max") Integer max,
+			@QueryParam("id") String id
+			) {
+		PageRequest pageRequest =PageRequest.of(min, max, Sort.Direction.ASC, "title");
+		Page<NotificationDTO> notifications = service.findAllByUserIdPaged(pageRequest, id);
 		return Response.ok(notifications).build();
 	}
 	
@@ -68,12 +83,5 @@ public class NotificationResource {
 		service.deleteById(id);
 		return Response.ok().build();
 	}
-	
-	@DELETE
-	public Response deleteAll() {
-		service.deleteAll();
-		return Response.ok().build();
-	}
-	
 
 }

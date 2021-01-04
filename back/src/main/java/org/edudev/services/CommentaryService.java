@@ -1,16 +1,14 @@
 package org.edudev.services;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
-import org.edudev.models.Client;
 import org.edudev.models.Commentary;
-import org.edudev.repositories.ClientRepository;
+import org.edudev.models.dtos.CommentaryDTO;
 import org.edudev.repositories.CommentaryRepository;
 import org.edudev.services.utils.WebError;
 import org.springframework.data.domain.Page;
@@ -22,51 +20,51 @@ public class CommentaryService {
 
 	@Inject
 	private CommentaryRepository repository;
-	
-	@Inject
-	private ClientRepository clientRepository;
-	
-	public Page<Commentary> findAllByPaged(PageRequest pageRequest) {
-		if (repository.findAll(pageRequest).isEmpty())
-			WebError.sendError(Response.Status.NO_CONTENT, "");
 
-		return repository.findAll(pageRequest);
+	public CommentaryDTO save(Commentary commentary) {
+		commentary.setDatePost(LocalDateTime.now());
+		
+		repository.save(commentary);
+		return new CommentaryDTO(commentary);
 	}
 	
-	public Commentary save(Commentary commentaryDTO) {			
-		Optional.ofNullable(clientRepository.findByLogin(commentaryDTO.getByLogin())).orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Usuário remetente não encontrado!"));
-		
-		Client client = clientRepository.findById(commentaryDTO.getToLoginId()).orElseThrow(
-				() -> WebError.returnError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!"));
-		
-		commentaryDTO.setDatePost(LocalDateTime.now());
-		repository.save(commentaryDTO);
-		
-		client.getCommentaries().add(commentaryDTO);
-		clientRepository.save(client);
-		
-		return commentaryDTO;
-	}
-	
-	public void update(Commentary commentaryDTO, String id) {
+	public CommentaryDTO update(Commentary commentary, String id) {
 		Commentary commentaryUpdate = repository.findById(id).orElseThrow(
-				() -> WebError.returnError(Response.Status.NOT_FOUND, "Id do destinatário não encontrado!"));
-		commentaryUpdate.setDescription(commentaryDTO.getDescription());
+				() -> WebError.returnError(Response.Status.NOT_FOUND, "Comentário não encontrado!"));
+		
+		commentaryUpdate.setDescription(commentary.getDescription());
+		repository.save(commentaryUpdate);
+		
+		return new CommentaryDTO(commentaryUpdate);
 	}
 	
 	public Long count() {
 		return repository.count();
 	}
+	
+	public Page<CommentaryDTO> findAllByPaged(PageRequest pageRequest) {
+		Page<Commentary> commentaries = repository.findAll(pageRequest);
+		
+		if (commentaries.isEmpty())
+			WebError.sendError(Response.Status.NO_CONTENT, "");
+
+		return commentaries.map(c -> new CommentaryDTO(c));
+	}
+	
+	public Page<CommentaryDTO> findAllByUserIdPaged(PageRequest pageRequest, String id) {
+		Page <Commentary> commentaries = repository.findByPagedId(id, pageRequest);
+		
+		if (commentaries.isEmpty())
+			WebError.sendError(Response.Status.NO_CONTENT, "");
+
+		return commentaries.map(c -> new CommentaryDTO(c));
+	}
 
 	public void deleteById(String id) {
-		if(!repository.findById(id).isPresent() || id.isBlank()) 
+		if (!repository.findById(id).isPresent())
 			WebError.sendError(Response.Status.NOT_FOUND, "Comentário não encontrado!");
-	
+
 		repository.deleteById(id);
 	}
 
-	public void deleteAll() {
-		repository.deleteAll();
-	}
-	
 }

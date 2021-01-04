@@ -42,10 +42,10 @@ public class Friend implements Serializable{
 	}
 	
 	public Friend(Client client) {
-		this.setImgUrl(client.getImgUrl());
-		this.setLogin(client.getLogin());
-		this.setLastTimeOnline(client.getLastTimeOnline());
-		this.setLocal(client.getLocal());
+		this.imgUrl = client.getImgUrl();
+		this.login = client.getLogin();
+		this.lastTimeOnline = client.getLastTimeOnline();
+		this.local = client.getLocal();
 	}
 
 	

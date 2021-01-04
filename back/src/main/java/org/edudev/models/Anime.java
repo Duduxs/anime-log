@@ -14,7 +14,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 
 import org.edudev.enums.AnimeGenre;
@@ -59,7 +58,6 @@ public class Anime implements Serializable {
 	@Column(name = "genre", nullable = false)
     @CollectionTable(name="anime_genre",  joinColumns = @JoinColumn(name = "anime_id"))
 	@Enumerated(EnumType.STRING)
-	@NotEmpty(message = "Gêneros não podem estar vazios!")
 	private Set<AnimeGenre> animeGenre = new HashSet<>();
 	
 	private AnimePublic animePublic;
@@ -72,7 +70,7 @@ public class Anime implements Serializable {
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime lastEdit;
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-	private LocalDateTime enterDate = LocalDateTime.now();
+	private LocalDateTime enterDate;
 
 	private AnimeStatus status;
 	private AnimeScore score;
@@ -233,6 +231,10 @@ public class Anime implements Serializable {
 
 	public void setMembers(Integer members) {
 		this.members = members;
+	}
+	
+	public void addMembers(Integer members) {
+		this.members+= members;
 	}
 	
 	public Integer getProgress() {
