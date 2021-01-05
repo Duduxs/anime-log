@@ -117,7 +117,7 @@ public class ClientService {
 			clientDTO.getFriends().add(fri);
 
 		for (Anime ani : client.getAnimes())
-			clientDTO.getAnimes().add(new AnimeDTO(ani, ""));
+			clientDTO.getAnimes().add(new AnimeDTO(ani));
 
 		return clientDTO;
 	}

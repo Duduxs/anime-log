@@ -53,18 +53,17 @@ public class Client implements Serializable {
 	@PastOrPresent
 	private LocalDateTime enterDate;
 
-	@OneToMany(mappedBy = "to")
+	@OneToMany(mappedBy = "to", cascade = CascadeType.REMOVE)
 	private Set<Notification> notifications = new HashSet<>();
 
-	@OneToMany(mappedBy = "to")
+	@OneToMany(mappedBy = "to", cascade = CascadeType.REMOVE)
 	private List<Commentary> commentaries = new ArrayList<>();
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.REMOVE)
 	@JoinTable(name = "client_friend_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
 	private Set<Friend> friends = new HashSet<>();
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "client_anime_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientAnime_id"))
+	@OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
 	private Set<Anime> animes = new HashSet<>();
 
 	public Client() {

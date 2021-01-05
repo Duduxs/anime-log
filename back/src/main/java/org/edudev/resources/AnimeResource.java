@@ -20,9 +20,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.edudev.enums.AnimeStatus;
 import org.edudev.models.Anime;
+import org.edudev.models.AnimeInfo;
 import org.edudev.models.dtos.AnimeDTO;
+import org.edudev.models.dtos.AnimeInfoDTO;
 import org.edudev.services.AnimeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,59 +42,59 @@ public class AnimeResource {
 	UriInfo uriInfo;
 
 	@POST
-	public Response save(@Valid Anime anime) {
-		AnimeDTO animeDTO = service.save(anime);
-		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", animeDTO.getId()).build();
-		return Response.created(uri).entity(animeDTO).build();
+	public Response save(@Valid AnimeInfo animeInfo) {
+		AnimeInfoDTO animeInfoDTO = service.save(animeInfo);
+		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", animeInfoDTO.getId()).build();
+		return Response.created(uri).entity(animeInfoDTO).build();
 	}
 
 	@POST
-	@Path("/{login}")
-	public Response saveInUser(@PathParam("login") String login, @Valid Anime anime) {
-		AnimeDTO animeDTO = service.saveInUser(login, anime);
+	@Path("/user")
+	public Response saveInUser(@Valid Anime anime) {
+		AnimeDTO animeDTO = service.saveInUser(anime);
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", animeDTO.getId()).build();
 		return Response.created(uri).entity(animeDTO).build();
 	}
 
 	@PUT
-	@Path("/{id}")
-	public Response editInUser(@PathParam("id") String id, @Valid Anime anime) {
+	@Path("/user/{id}")
+	public Response editInUser(@PathParam("id")String id, @Valid Anime anime) {
 		AnimeDTO animeDTO = service.editInUser(id, anime);
 		return Response.ok(animeDTO).build();
 	}
 
 	@DELETE
-	@Path("/{login}")
-	public Response deleteInUser(@PathParam("login") String login, @Valid Anime anime) {
-		service.deleteInUser(login, anime);
+	@Path("/user/{id}")
+	public Response deleteInUser(@PathParam("id") String id) {
+		service.deleteInUser(id);
 		return Response.noContent().build();
 	}
-
-	@GET
-	@Path("/count")
-	public Response count() {
-		return Response.ok(service.count()).build();
-	}
-
-	@GET
-	@Path("/count/status/{login}")
-	public Response countByStatus(@PathParam("login") String login) {
-		return Response.ok(service.countByStatus(login)).build();
-	}
-
-	@GET
-	@Path("/{id}")
-	public Response findById(@PathParam("id") String id) {
-		AnimeDTO animeDTO = service.findById(id);
-		return Response.ok(animeDTO).build();
-	}
-	
-	@GET
-	@Path("/lastEdit/{login}")
-	public Response findLastEditAnime(@PathParam("login") String login) {
-		AnimeDTO animeDTO = service.findLastAnimeEdit(login);
-		return Response.ok(animeDTO).build();
-	}
+//
+//	@GET
+//	@Path("/count")
+//	public Response count() {
+//		return Response.ok(service.count()).build();
+//	}
+//
+//	@GET
+//	@Path("/count/status/{login}")
+//	public Response countByStatus(@PathParam("login") String login) {
+//		return Response.ok(service.countByStatus(login)).build();
+//	}
+//
+//	@GET
+//	@Path("/{id}")
+//	public Response findById(@PathParam("id") String id) {
+//		AnimeDTO animeDTO = service.findById(id);
+//		return Response.ok(animeDTO).build();
+//	}
+//	
+//	@GET
+//	@Path("/lastEdit/{login}")
+//	public Response findLastEditAnime(@PathParam("login") String login) {
+//		AnimeDTO animeDTO = service.findLastAnimeEdit(login);
+//		return Response.ok(animeDTO).build();
+//	}
 
 	@GET
 	public Response findAllPaged(
@@ -161,18 +162,18 @@ public class AnimeResource {
 		return Response.ok(clients).build();
 	}
 
-	@GET
-	@Path("/search/status/{login}")
-	public Response searchByStatusPaged(
-			@PathParam("login")String login, 
-			@Min(0)
-			@QueryParam("min") Integer min, 
-			@Max(2000)
-			@QueryParam("max") Integer max,
-			@QueryParam("status") AnimeStatus status) {
-		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "englishTitle");
-		Page<AnimeDTO> clients = service.searchByStatusPaged(login, pageRequest, status);
-		return Response.ok(clients).build();
-	}
+//	@GET
+//	@Path("/search/status/{login}")
+//	public Response searchByStatusPaged(
+//			@PathParam("login")String login, 
+//			@Min(0)
+//			@QueryParam("min") Integer min, 
+//			@Max(2000)
+//			@QueryParam("max") Integer max,
+//			@QueryParam("status") AnimeStatus status) {
+//		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "englishTitle");
+//		Page<AnimeDTO> clients = service.searchByStatusPaged(login, pageRequest, status);
+//		return Response.ok(clients).build();
+//	}
 	
 }

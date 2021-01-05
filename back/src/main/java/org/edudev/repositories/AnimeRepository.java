@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface AnimeRepository extends JpaRepository<Anime, String>{
-
+	
 	@Query("FROM Anime a WHERE LOWER(a.englishTitle) LIKE CONCAT('%',LOWER(:title),'%')")
 	public Page<Anime> findByPagedEnglishTitle(@Param("title")String title, PageRequest pageRequest);
 	
