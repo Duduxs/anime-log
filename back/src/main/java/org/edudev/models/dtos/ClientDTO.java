@@ -23,6 +23,11 @@ public class ClientDTO {
 
 	private String id = UUID.randomUUID().toString();
 	
+	private String name;
+	private String local;
+	private String about;
+	private String imgUrl;
+	
 	@Email(message = "Por favor insira um email válido!")
 	@NotBlank(message = "Email não pode estar vazio!")
 	private String email;
@@ -34,8 +39,10 @@ public class ClientDTO {
 	@Size(min = 5, max = 10,  message = "Senha deve ter cinco a dez caracteres!")
 	private String password;
 	private Boolean online;
-	private String local;
-	private String imgUrl;
+
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
+	private LocalDateTime birthDate;
 	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	@PastOrPresent
@@ -54,15 +61,18 @@ public class ClientDTO {
 
 	}
 
-	public ClientDTO(String id, String email, String login, String password, Boolean online, LocalDateTime enterDate, String imgUrl, String local, LocalDateTime lastTimeOnline) {
+	public ClientDTO(String id, String name, String local, String about,  String imgUrl,  String email, String login, String password, Boolean online, LocalDateTime birthDate, LocalDateTime enterDate, LocalDateTime lastTimeOnline) {
 		this.id = id;
+		this.name = name;
+		this.local = local;
+		this.about = about;
 		this.email = email;
+		this.imgUrl = imgUrl;
 		this.login = login;
 		this.password = password;
 		this.online = online;
+		this.birthDate = birthDate;
 		this.enterDate = enterDate;
-		this.imgUrl = imgUrl;
-		this.local = local;
 		this.lastTimeOnline = lastTimeOnline;
 	}
 
@@ -72,6 +82,38 @@ public class ClientDTO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLocal() {
+		return local;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	public String getEmail() {
@@ -89,7 +131,7 @@ public class ClientDTO {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -97,7 +139,7 @@ public class ClientDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Boolean getOnline() {
 		return online;
 	}
@@ -105,21 +147,13 @@ public class ClientDTO {
 	public void setOnline(Boolean online) {
 		this.online = online;
 	}
-
-	public String getLocal() {
-		return local;
-	}
-
-	public void setLocal(String local) {
-		this.local = local;
-	}
 	
-	public String getImgUrl() {
-		return imgUrl;
+	public LocalDateTime getBirthDate() {
+		return birthDate;
 	}
 
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
+	public void setBirthDate(LocalDateTime birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	public LocalDateTime getEnterDate() {
@@ -129,7 +163,7 @@ public class ClientDTO {
 	public void setEnterDate(LocalDateTime enterDate) {
 		this.enterDate = enterDate;
 	}
-	
+
 	public LocalDateTime getLastTimeOnline() {
 		return lastTimeOnline;
 	}

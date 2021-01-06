@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.edudev.models.Client;
 import org.edudev.models.dtos.ClientDTO;
 import org.edudev.services.ClientService;
 import org.springframework.data.domain.Page;
@@ -39,6 +41,15 @@ public class ClientResource {
 	@POST
 	public Response save(@Valid ClientDTO clientDTO) {
 		service.save(clientDTO);
+
+		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", clientDTO.getId()).build();
+		return Response.created(uri).entity(clientDTO).build();
+	}
+	
+	@PUT
+	@Path("/{id}")
+	public Response update(@PathParam("id")String id, @Valid Client client) {
+		ClientDTO clientDTO = service.update(id, client);
 
 		URI uri = uriInfo.getAbsolutePathBuilder().path("{id}").resolveTemplate("id", clientDTO.getId()).build();
 		return Response.created(uri).entity(clientDTO).build();

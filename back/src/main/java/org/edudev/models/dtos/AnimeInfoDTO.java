@@ -12,7 +12,9 @@ import org.edudev.enums.AnimePublic;
 import org.edudev.models.AnimeInfo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AnimeInfoDTO {
 
 	@Id
@@ -89,6 +91,7 @@ public class AnimeInfoDTO {
 		this.duration = animeInfo.getDuration();
 		this.animePublic = animeInfo.getAnimePublic();
 		this.enterDate = animeInfo.getEnterDate();
+		this.animeGenre.addAll(animeInfo.getAnimeGenre());
 	}
 
 	public String getId() {

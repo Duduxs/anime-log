@@ -45,7 +45,7 @@ public class Client implements Serializable {
 	private Boolean online;
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	@PastOrPresent
-	private LocalDateTime birthdate;	
+	private LocalDateTime birthDate;	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	@PastOrPresent
 	private LocalDateTime lastTimeOnline;
@@ -71,7 +71,7 @@ public class Client implements Serializable {
 	}
 
 	public Client(String id, String name, String local, String about, String imgUrl, Genre genre, String email,
-			String login, String password, Boolean online, LocalDateTime birthdate, LocalDateTime lastTimeOnline,
+			String login, String password, Boolean online, LocalDateTime birthDate, LocalDateTime lastTimeOnline,
 			LocalDateTime enterDate) {
 		this.id = id;
 		this.name = name;
@@ -83,7 +83,7 @@ public class Client implements Serializable {
 		this.login = login;
 		this.password = password;
 		this.online = online;
-		this.birthdate = birthdate;
+		this.birthDate = birthDate;
 		this.lastTimeOnline = lastTimeOnline;
 		this.enterDate = enterDate;
 	}
@@ -168,12 +168,12 @@ public class Client implements Serializable {
 		this.online = online;
 	}
 
-	public LocalDateTime getBirthdate() {
-		return birthdate;
+	public LocalDateTime getBirthDate() {
+		return birthDate;
 	}
 
-	public void setBirthdate(LocalDateTime birthdate) {
-		this.birthdate = birthdate;
+	public void setBirthDate(LocalDateTime birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	public LocalDateTime getLastTimeOnline() {
@@ -212,7 +212,7 @@ public class Client implements Serializable {
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + ", local=" + local + ", imgUrl=" + imgUrl + ", genre=" + genre
-				+ ", email=" + email + ", login=" + login + ", password=" + password + ", birthdate=" + birthdate
+				+ ", email=" + email + ", login=" + login + ", password=" + password + ", birthDate=" + birthDate
 				+ ", lastTimeOnline=" + lastTimeOnline + ", enterDate=" + enterDate + ", notifications=" + notifications
 				+ ", commentaries=" + commentaries + ", friends=" + friends + "]";
 	}

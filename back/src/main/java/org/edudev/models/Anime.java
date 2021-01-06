@@ -51,7 +51,6 @@ public class Anime implements Serializable {
 		return review;
 	}
 
-
 	public AnimeInfo getAnimeInfo() {
 		return animeInfo;
 	}

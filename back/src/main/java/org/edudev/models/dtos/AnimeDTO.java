@@ -40,19 +40,6 @@ public class AnimeDTO {
 				anime.getReview().getLastEdit(), anime.getReview().getStatus(), anime.getReview().getScore());
 	}
 
-	public AnimeDTO(Anime anime, Integer mainDTO) {
-		this.englishTitle = anime.getAnimeInfo().getEnglishTitle();
-		this.imgUrl = anime.getAnimeInfo().getImgUrl();
-	}
-
-
-	public AnimeDTO(Anime anime, Long lastAnimeEdit) {
-		this.setEnglishTitle(anime.getAnimeInfo().getEnglishTitle());
-//		this.setProgress(anime.getProgress());
-//		this.setEpisodes(anime.getEpisodes());
-//		this.setLastEdit(anime.getLastEdit());
-	}
-
 	public String getId() {
 		return id;
 	}

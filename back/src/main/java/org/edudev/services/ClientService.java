@@ -30,19 +30,28 @@ public class ClientService {
 	@Inject
 	private ClientRepository repository;
 
-
 	public ClientDTO save(ClientDTO clientDTO) {
 		if (repository.findByLogin(clientDTO.getLogin()) != null)
 			WebError.sendError(Response.Status.CONFLICT, "Login já existe");
 		if (repository.findByEmail(clientDTO.getEmail()) != null)
 			WebError.sendError(Response.Status.CONFLICT, "Email já existe");
-		
+
 		repository.save(fromDTO(clientDTO));
 		return clientDTO;
 	}
-	
+
+	public ClientDTO update(String id, Client entity) {
+		Client client = repository.findById(id)
+				.orElseThrow(() -> WebError.returnError(Response.Status.NOT_FOUND, "Cliente não encontrado!"));
+		
+		ClientDTO dto = toDTOPut(client, entity);
+		repository.save(client);
+		return dto;
+	}
+
 	public ClientDTO login(String login, String password) {
-		Client client = repository.findByLoginAndPassword(login, password).orElseThrow(() -> WebError.returnError(Response.Status.UNAUTHORIZED, ""));
+		Client client = repository.findByLoginAndPassword(login, password)
+				.orElseThrow(() -> WebError.returnError(Response.Status.UNAUTHORIZED, ""));
 		client.setLastTimeOnline(LocalDateTime.now());
 		client.setOnline(true);
 		return toDTO(client);
@@ -51,7 +60,7 @@ public class ClientService {
 	public Long count() {
 		return repository.count();
 	}
-	
+
 	public ClientDTO findById(String id) {
 		Optional<Client> client = repository.findById(id);
 		ClientDTO clientDTO = toDTO(
@@ -89,30 +98,42 @@ public class ClientService {
 		c.setPassword(clientDTO.getPassword());
 		c.setEnterDate(LocalDateTime.now());
 		c.setLastTimeOnline(LocalDateTime.now());
-		
+
 		clientDTO.setId(c.getId());
 		clientDTO.setEnterDate(LocalDateTime.now());
 		clientDTO.setLastTimeOnline(LocalDateTime.now());
-		
+
 		return c;
+	}
+	
+	public ClientDTO toDTOPut(Client client,  Client entity) {
+		client.setName(entity.getName());
+		client.setLocal(entity.getLocal());
+		client.setAbout(entity.getAbout());
+		client.setImgUrl(entity.getImgUrl());
+		client.setGenre(entity.getGenre());
+		client.setBirthDate(entity.getBirthDate());
+		return new ClientDTO(client.getId(), client.getName(), client.getLocal(), client.getAbout(), client.getImgUrl(), client.getEmail(), null, null, null, client.getBirthDate(), null,null);
 	}
 
 	public ClientDTO toDTO(Client client) {
 
-		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getEmail(), client.getLogin(), client.getPassword(), client.getOnline(), client.getEnterDate(), client.getImgUrl(), client.getLocal(), client.getLastTimeOnline());
-
 		List<NotificationDTO> notificationsDTO = new ArrayList<>();
 		client.getNotifications().forEach(n -> notificationsDTO.add(new NotificationDTO(n)));
-		
-		for (NotificationDTO not : notificationsDTO)
-			clientDTO.getNotifications().add(not);
 
 		List<CommentaryDTO> commentariesDTO = new ArrayList<>();
 		client.getCommentaries().forEach(c -> commentariesDTO.add(new CommentaryDTO(c)));
-		
+
+		ClientDTO clientDTO = new ClientDTO(client.getId(), client.getName(), client.getLocal(), client.getAbout(),
+				client.getImgUrl(), client.getEmail(), client.getLogin(), null, client.getOnline(), client.getBirthDate(),
+				client.getEnterDate(), client.getLastTimeOnline());
+
+		for (NotificationDTO not : notificationsDTO)
+			clientDTO.getNotifications().add(not);
+
 		for (CommentaryDTO com : commentariesDTO)
 			clientDTO.getCommentaries().add(com);
-		
+
 		for (Friend fri : client.getFriends())
 			clientDTO.getFriends().add(fri);
 

@@ -40,9 +40,11 @@ public class AnimeInfo implements Serializable {
 
 	private String sinopse;
 	private Integer episodes;
-	
+	@Column(unique = true)
 	private String englishTitle;
+	@Column(unique = true)
 	private String japaneseTitle;
+	@Column(unique = true)
 	private String portugueseTitle;
 	
 	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -105,7 +107,11 @@ public class AnimeInfo implements Serializable {
 
 	public void addMembers(Integer members) {
 	this.members+= members;
-}
+	}
+	
+	public void removeMembers(Integer members) {
+	this.members-= members;
+	}
 	
 	public String getAuthor() {
 		return author;
