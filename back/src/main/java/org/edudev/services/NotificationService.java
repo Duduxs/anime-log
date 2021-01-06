@@ -5,11 +5,9 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
-import org.edudev.models.Client;
 import org.edudev.models.Notification;
-import org.edudev.repositories.ClientRepository;
+import org.edudev.models.dtos.NotificationDTO;
 import org.edudev.repositories.NotificationRepository;
-import org.edudev.services.utils.Validator;
 import org.edudev.services.utils.WebError;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,31 +18,38 @@ public class NotificationService {
 
 	@Inject
 	private NotificationRepository repository;
+
+	public NotificationDTO save(Notification notification) {
+		repository.save(notification);
+		return new NotificationDTO(notification);
+	}
 	
-	@Inject
-	private Validator validator;
+	public Long count() {
+		return repository.count();
+	}
 	
-	@Inject
-	private ClientRepository clientRepository;
-	
-	public Page<Notification> findAllByPaged(PageRequest pageRequest) {
-		if (repository.findAll(pageRequest).isEmpty())
+	public Page<NotificationDTO> findAllPaged(PageRequest pageRequest) {
+		Page<Notification> notifications = repository.findAll(pageRequest);
+		
+		if (notifications.isEmpty())
 			WebError.sendError(Response.Status.NO_CONTENT, "");
 
-		return repository.findAll(pageRequest);
+		return notifications.map(n -> new NotificationDTO(n));
+	}
+	
+	public Page<NotificationDTO> findAllByUserIdPaged(PageRequest pageRequest, String id) {
+		Page <Notification> notifications = repository.findByPagedId(id, pageRequest);
+		
+		if (notifications.isEmpty())
+			WebError.sendError(Response.Status.NO_CONTENT, "");
+
+		return notifications.map(n -> new NotificationDTO(n));
 	}
 
-	public Notification save(Notification notification) {;
-		validator.validateUserNotification(notification.getByLogin());
-
-		Client client = clientRepository.findById(notification.getToLoginId()).orElseThrow( () -> WebError.returnError(Response.Status.NOT_FOUND, "Id do Usuário destinatário não encontrado!"));
+	public void deleteById(String id) {
+		if(!repository.findById(id).isPresent() || id.isBlank()) 
+			WebError.sendError(Response.Status.NOT_FOUND, "Notificação não encontrada!");
 		
-		notification.setImgUrl(client.getImgUrl());
-		repository.save(notification);
-		
-		client.getNotifications().add(notification);
-		clientRepository.save(client);
-		
-		return notification; 
+		repository.deleteById(id);
 	}
 }

@@ -1,45 +1,48 @@
 package org.edudev.models;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
-public class Notification implements Serializable {
+public class Commentary implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String id = UUID.randomUUID().toString();
-	
 	private Client by;
 	@ManyToOne
 	private Client to;
-		
-	@NotBlank(message = "Título não pode estar vazio!")
-	@Length(min = 5, max = 20, message = "Títulos entre 5 e 20 caracteres permitidos!")
-	private String title;
-	@NotBlank(message = "Mensagem não pode estar vazio!")
-	@Length(min = 10, max = 50, message = "Mensagens entre 10 e 50 caracteres permitidas!")
-	private String message;
-
-	public Notification() {
+	
+	@Length(min = 1, max = 12000, message = "Comentários entre 1 e 12000 caracteres permitidos!")
+	@NotBlank(message = "Description não pode estar vazia!")
+	private String description;
+	@Column(nullable = true)
+	@PastOrPresent
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	private LocalDateTime datePost;
+	
+	public Commentary() {
 
 	}
 
-	public Notification(String id, String imgUrl, String sourceUser, String title, String message, Client by,
-			Client to) {
+	public Commentary(String id, String imgUrl, Client by, String description, LocalDateTime datePost) {
 		this.id = id;
 		this.by = by;
-		this.title = title;
-		this.message = message;
-		this.to = to;
+		this.description = description;
+		this.datePost = datePost;
 	}
 	
 	public String getId() {
@@ -58,28 +61,28 @@ public class Notification implements Serializable {
 		this.by = by;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public LocalDateTime getDatePost() {
+		return datePost;
+	}
+
+	public void setDatePost(LocalDateTime datePost) {
+		this.datePost = datePost;
+	}
+	
 	public Client getTo() {
 		return to;
 	}
 
 	public void setTo(Client to) {
 		this.to = to;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	@Override
@@ -98,7 +101,7 @@ public class Notification implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Notification other = (Notification) obj;
+		Commentary other = (Commentary) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

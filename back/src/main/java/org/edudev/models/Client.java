@@ -3,15 +3,24 @@ package org.edudev.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.PastOrPresent;
 
 import org.edudev.enums.Genre;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Client implements Serializable {
@@ -20,8 +29,10 @@ public class Client implements Serializable {
 
 	@Id
 	private String id = UUID.randomUUID().toString();
+	
 	private String name;
 	private String local;
+	private String about;
 	private String imgUrl;
 
 	private Genre genre;
@@ -31,33 +42,52 @@ public class Client implements Serializable {
 	@Column(unique = true)
 	private String login;
 	private String password;
-
-	private LocalDateTime birthdate;
+	private Boolean online;
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
+	private LocalDateTime birthDate;	
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
 	private LocalDateTime lastTimeOnline;
+	@JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+	@PastOrPresent
 	private LocalDateTime enterDate;
 
-	@OneToMany(mappedBy = "toLoginId")
-	private List<Notification> notifications = new ArrayList<>();
+	@OneToMany(mappedBy = "to", cascade = CascadeType.REMOVE)
+	private Set<Notification> notifications = new HashSet<>();
+
+	@OneToMany(mappedBy = "to", cascade = CascadeType.REMOVE)
+	private List<Commentary> commentaries = new ArrayList<>();
+
+	@ManyToMany(cascade = CascadeType.REMOVE)
+	@JoinTable(name = "client_friend_join", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "clientFriend_id"))
+	private Set<Friend> friends = new HashSet<>();
+	
+	@OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
+	private Set<Anime> animes = new HashSet<>();
 
 	public Client() {
 
 	}
 
-	public Client(String id, String name, Genre genre, String local, String email, String login, String password,
-			LocalDateTime birthdate, LocalDateTime lastTimeOnline, LocalDateTime enterDate, String imgUrl) {
+	public Client(String id, String name, String local, String about, String imgUrl, Genre genre, String email,
+			String login, String password, Boolean online, LocalDateTime birthDate, LocalDateTime lastTimeOnline,
+			LocalDateTime enterDate) {
 		this.id = id;
 		this.name = name;
+		this.local = local;
+		this.about = about;
 		this.imgUrl = imgUrl;
 		this.genre = genre;
-		this.local = local;
 		this.email = email;
 		this.login = login;
 		this.password = password;
-		this.birthdate = birthdate;
+		this.online = online;
+		this.birthDate = birthDate;
 		this.lastTimeOnline = lastTimeOnline;
 		this.enterDate = enterDate;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -74,6 +104,22 @@ public class Client implements Serializable {
 		this.name = name;
 	}
 
+	public String getLocal() {
+		return local;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	public String getImgUrl() {
 		return imgUrl;
 	}
@@ -88,14 +134,6 @@ public class Client implements Serializable {
 
 	public void setGenre(Genre genre) {
 		this.genre = genre;
-	}
-
-	public String getLocal() {
-		return local;
-	}
-
-	public void setLocal(String local) {
-		this.local = local;
 	}
 
 	public String getEmail() {
@@ -122,12 +160,20 @@ public class Client implements Serializable {
 		this.password = password;
 	}
 
-	public LocalDateTime getBirthdate() {
-		return birthdate;
+	public Boolean getOnline() {
+		return online;
 	}
 
-	public void setBirthdate(LocalDateTime birthdate) {
-		this.birthdate = birthdate;
+	public void setOnline(Boolean online) {
+		this.online = online;
+	}
+
+	public LocalDateTime getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(LocalDateTime birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	public LocalDateTime getLastTimeOnline() {
@@ -146,8 +192,29 @@ public class Client implements Serializable {
 		this.enterDate = enterDate;
 	}
 
-	public List<Notification> getNotifications() {
+	public Set<Notification> getNotifications() {
 		return notifications;
+	}
+
+	public List<Commentary> getCommentaries() {
+		return commentaries;
+	}
+
+	public Set<Friend> getFriends() {
+		return friends;
+	}
+	
+	public Set<Anime> getAnimes() {
+		return animes;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", name=" + name + ", local=" + local + ", imgUrl=" + imgUrl + ", genre=" + genre
+				+ ", email=" + email + ", login=" + login + ", password=" + password + ", birthDate=" + birthDate
+				+ ", lastTimeOnline=" + lastTimeOnline + ", enterDate=" + enterDate + ", notifications=" + notifications
+				+ ", commentaries=" + commentaries + ", friends=" + friends + "]";
 	}
 
 	@Override
