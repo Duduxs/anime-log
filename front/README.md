@@ -1,50 +1,27 @@
-# anime-log project
+# Front
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.4.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Development server
 
-## Running the application in dev mode
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
-```
+## Code scaffolding
 
-## Packaging and running the application
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `anime-log-1.0.0-SNAPSHOT-runner.jar` file in the `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+## Build
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-The application is now runnable using `java -jar target/anime-log-1.0.0-SNAPSHOT-runner.jar`.
+## Running unit tests
 
-## Creating a native executable
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
+## Running end-to-end tests
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-You can then execute your native executable with: `./target/anime-log-1.0.0-SNAPSHOT-runner`
+## Further help
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
-
-# Spring Web
-
-<p>A Hello World Spring Web Controller</p>
-
-Guide: https://quarkus.io/guides/spring-web
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
