@@ -8,7 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
-
+import { MatMenuModule } from '@angular/material/menu';
+ 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BlockComponent } from './block/block.component';
@@ -29,7 +30,8 @@ import { FormComponent } from './form/form.component';
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    MatMenuModule
   ],
   exports:[
     HeaderComponent,
