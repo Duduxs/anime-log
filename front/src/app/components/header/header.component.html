@@ -3,21 +3,48 @@
   <img src="../../../assets/imgs/Garota-SVG.png" alt="AnimeLog logo" />
 
   <div class="profile">
-    <div>
+    <div class="search">
+
+      <mat-form-field appearance="fill" class="search-select">
+        <mat-label>Tipo</mat-label>
+        <mat-select [(ngModel)]="selectedValue" name="type" >
+          <mat-option *ngFor="let type of types" [value]="type.value">
+            {{type.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="search-bar" [floatLabel]="'never'">
+        <mat-label class="search-label">Procure por animes ou usuários</mat-label>
+        <input matInput type="text" [(ngModel)]="value" />
+        <button
+          mat-button
+          *ngIf="value"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="value = ''"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div class="notifications">
       <p class="notifications-quantity">2</p>
 
       <button mat-button [matMenuTriggerFor]="beforeMenu">
         <mat-icon class="notifications-icon">notifications</mat-icon>
       </button>
+
       <mat-menu #beforeMenu="matMenu" xPosition="before">
-        <div class="menu-item" mat-menu-item>
+        <div class="notification-item" mat-menu-item>
           <img
-            class="menu-item-img"
+            class="notification-item-img"
             src="https://i.pinimg.com/originals/6e/32/28/6e322866429e040431c39c9a2592bed6.jpg"
             alt="Notification Photo"
           />
-          <strong class="menu-item-title">Pedido de amizade</strong>
-          <span class="menu-item-description"
+          <strong class="notification-item-title">Pedido de amizade</strong>
+          <span class="notification-item-description"
             >Emilya-tan quer ser seu amigo</span
           >
 
@@ -26,14 +53,14 @@
           <hr />
         </div>
 
-        <div class="menu-item" mat-menu-item>
+        <div class="notification-item" mat-menu-item>
           <img
-            class="menu-item-img"
+            class="notification-item-img"
             src="https://cdn.myanimelist.net/s/common/uploaded_files/1442009294-1cc09cd8467315f87f335514d73cd30e.jpeg"
             alt="Notification Photo"
           />
-          <strong class="menu-item-title">Pedido de amizade</strong>
-          <span class="menu-item-description"
+          <strong class="notification-item-title">Pedido de amizade</strong>
+          <span class="notification-item-description"
             >D4RK-Z3R0 quer ser seu amigo</span
           >
 
@@ -44,31 +71,34 @@
       </mat-menu>
     </div>
 
-    <button mat-button [matMenuTriggerFor]="menu">
-      <mat-icon>arrow_drop_down</mat-icon>Duduxs
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>person</mat-icon>
-        <span>Perfil</span>  
+    <div class="user">
+      <button mat-button [matMenuTriggerFor]="menu" class="user-name">
+        <mat-icon>arrow_drop_down</mat-icon>Duduxs
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>Perfil</span>
         </button>
-      <button mat-menu-item>
-        <mat-icon>groups</mat-icon>
-        <span>Amigos</span>  
+        <button mat-menu-item>
+          <mat-icon>groups</mat-icon>
+          <span>Amigos</span>
         </button>
-      <button mat-menu-item>
-        <mat-icon>catching_pokemon</mat-icon>
-        <span>Animes</span>  
+        <button mat-menu-item>
+          <mat-icon>catching_pokemon</mat-icon>
+          <span>Animes</span>
         </button>
-      <button mat-menu-item>
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Sair</span> 
+        <button mat-menu-item>
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Sair</span>
         </button>
-    </mat-menu>
+      </mat-menu>
 
-    <img
-      src="https://i.pinimg.com/originals/55/5b/48/555b489e06ba46c271e11df85dca01e3.jpg"
-      alt="Image Profile"
-    />
+      <img
+        class="user-img"
+        src="https://i.pinimg.com/originals/55/5b/48/555b489e06ba46c271e11df85dca01e3.jpg"
+        alt="Image Profile"
+      />
+    </div>
   </div>
 </mat-toolbar>
