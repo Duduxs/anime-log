@@ -2,20 +2,46 @@
   <a routerLink="/"><h1 class="title">AnimeLog</h1></a>
   <img src="../../../assets/imgs/Garota-SVG.png" alt="AnimeLog logo" />
 
-  <div class="profile">
-    <div class="search">
 
+  <div class="main" *ngIf="isMainPage">
+
+
+  <div class="profile">
+    <div class="help">
+      <button mat-button [matMenuTriggerFor]="help" class="user-name">
+        Ajuda<mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #help="matMenu">
+        <button mat-menu-item>
+          <mat-icon>info</mat-icon>
+          <span>Sobre a plataforma</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>question_answer</mat-icon>
+          <span>FAQ</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>bug_report</mat-icon>
+          <span>Bugs</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <div class="search">
       <mat-form-field appearance="fill" class="search-select">
         <mat-label>Tipo</mat-label>
-        <mat-select [(ngModel)]="selectedValue" name="type" >
+        <mat-select [(ngModel)]="selectedValue" name="type">
           <mat-option *ngFor="let type of types" [value]="type.value">
-            {{type.viewValue}}
+            {{ type.viewValue }}
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <mat-form-field class="search-bar" [floatLabel]="'never'">
-        <mat-label class="search-label">Procure por animes ou usuários</mat-label>
-        <input matInput type="text" [(ngModel)]="value" />
+        <mat-label class="search-label"
+          >Procure por animes ou usuários</mat-label
+        >
+        <input [disabled]="selectedValue == undefined" matInput type="text" (blur)="blur(true)" (focus)="blur(false)" [(ngModel)]="value" />
         <button
           mat-button
           *ngIf="value"
@@ -27,6 +53,17 @@
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
+      <div class="search-result" *ngIf="value && !inputSearchBlur && selectedValue != undefined">
+        <div class="search-result-item"> 
+  
+          <img
+            class="search-result-item-img"
+            src="https://i.pinimg.com/originals/66/89/ce/6689ce30c88c0033cc7d3ec5c4e28d90.jpg"
+            alt="Notification Photo"
+          />
+          <p class="search-result-item-title">Yakusoku no Neverland</p>
+        </div>
+      </div>
     </div>
 
     <div class="notifications">
@@ -101,4 +138,5 @@
       />
     </div>
   </div>
+</div>
 </mat-toolbar>
