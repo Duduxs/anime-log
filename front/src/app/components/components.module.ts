@@ -16,13 +16,19 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BlockComponent } from './block/block.component';
 import { FormComponent } from './form/form.component';
+import { AnimeBlockListComponent } from './main/anime-block-list/anime-block-list.component';
+import { UserBlockListComponent } from './main/user-block-list/user-block-list.component';
+import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anime-block-list.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent, 
     BlockComponent, 
-    FormComponent
+    FormComponent, 
+    AnimeBlockListComponent, 
+    UserBlockListComponent, 
+    TopAnimeBlockListComponent
   ],
   imports: [
     MatToolbarModule,
@@ -42,6 +48,9 @@ import { FormComponent } from './form/form.component';
     FooterComponent,
     BlockComponent,
     FormComponent,
+    AnimeBlockListComponent,
+    UserBlockListComponent,
+    TopAnimeBlockListComponent
   ]
 })
 export class ComponentsModule { }

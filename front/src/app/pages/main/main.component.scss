@@ -24,28 +24,70 @@
 
     .seasonAnimes,
     .lastAnimes {
-      height: 300px;
-      background-color: #bc92f0;
-      width: 900px;
-      border-radius: 10px;
-      animation: float 6s ease-in-out infinite;
-      box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.048);
+      height: 330px;
+      width: 1200px;
+    }
+    app-anime-block-list:nth-last-child(-n + 20) {
+      margin-left: 10px;
+    }
+
+    .anime-header-title {
+      line-height: 51px;
+      vertical-align: middle;
+      font-size: 30px;
+     
     }
   }
+
+
+  .seasonAnimes,
+  .lastAnimes,
+  .users,
+  .ranks {
+    background-color: #bc92f0;
+    border-radius: 10px;
+    animation: float 6s ease-in-out infinite;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.048);
+  }
+
+  .anime-header-title, .user-header-title, .rank-most-popular-header-title, .rank-less-popular-header-title{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: Rosario;
+    font-weight: lighter;
+    color: #56436e;
+  }
+
   .user-content {
-    background-color: blue;
     flex: 1;
     align-self: center;
-    .users{
-        height: 600px;
-        background-color: #bc92f0;
-        width: 350px;
-        border-radius: 10px;
-        animation: float 6s ease-in-out infinite;
-        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.048);
-        margin-left: 150px;
+
+    .users {
+      height: 600px;
+      width: 350px;
+      margin-left: 200px;
+
+      .user-header-title{
+        font-size: 20px;
+      }
+    }
+  }
+
+  .rank-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .ranks {
+      height: 330px;
+      width: 530px;
+      margin-right: 50px;
+
+      .rank-most-popular-header-title, .rank-less-popular-header-title{
+        font-size: 30px;
+        font-weight: lighter;
+        margin: 5px 0px 0px 0px;
+      }
     }
   }
 }
-
-
