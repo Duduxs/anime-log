@@ -25,7 +25,8 @@
   <div class="user-content">
     <div class="users">
       <h1 class="user-header-title">Usuários online</h1>
-      <app-user-block-list *ngFor="let user of users"
+      <app-user-block-list
+        *ngFor="let user of users"
         login="{{ user.login }}"
         img="{{ user.img }}"
       >
@@ -36,13 +37,22 @@
     <div class="ranks">
       <h1 class="rank-most-popular-header-title">Animes mais populares</h1>
       <app-top-anime-block-list
-      title="Naruto"
-      img="https://img.ibxk.com.br//ms/images/highlights/000/048/935/46162.jpg?w=1200&h=675&mode=crop&scale=both"
-    >
-    </app-top-anime-block-list>
+        *ngFor="let anime of animes"
+        title="{{ anime.title }}"
+        img="{{ anime.img }}"
+        index="{{ animes.indexOf(anime) +1 }} "
+      >
+      </app-top-anime-block-list>
     </div>
     <div class="ranks">
       <h1 class="rank-less-popular-header-title">Animes menos populares</h1>
+      <app-top-anime-block-list
+      *ngFor="let anime of animes"
+      title="{{ anime.title }}"
+      img="{{ anime.img }}"
+      index="{{ animes.indexOf(anime) +1 }} "
+    >
+    </app-top-anime-block-list>
     </div>
   </div>
 </div>

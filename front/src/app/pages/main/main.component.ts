@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  constructor() {}
+  constructor() {
+    console.log(this.animes.indexOf(this.animes[0]));
+  }
 
   animes = [
     {
@@ -19,7 +21,7 @@ export class MainComponent implements OnInit {
       img: 'https://br.web.img2.acsta.net/newsv7/19/08/14/00/05/1724103.jpg',
     },
     {
-      title: 'Boku no Hero Academia',
+      title: 'Boku no Hero',
       img:
         'https://referencianerd.com/wp-content/uploads/2019/02/xMPcW4VHuoZvwPRh1kbCwkL7uC.jpg',
     },

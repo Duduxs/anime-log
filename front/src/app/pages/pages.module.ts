@@ -9,10 +9,11 @@ import { RegisterComponent } from './register/register.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RouterModule } from '@angular/router';
 import { MainComponent } from './main/main.component';
+import { AnimeComponent } from './anime/anime.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, LoginComponent, RegisterComponent, NotFoundComponent, NotFoundComponent, MainComponent],
+  declarations: [HomeComponent, LoginComponent, RegisterComponent, NotFoundComponent, NotFoundComponent, MainComponent, AnimeComponent],
   imports: [
     CommonModule,
     ComponentsModule,

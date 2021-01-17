@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class TopAnimeBlockListComponent implements OnInit {
   @Input() title = '';
   @Input() img = '';
+  @Input() index = 1;
   constructor() { }
 
   ngOnInit(): void {

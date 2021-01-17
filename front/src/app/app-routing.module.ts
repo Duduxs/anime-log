@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AnimeComponent } from './pages/anime/anime.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MainComponent } from './pages/main/main.component';
@@ -12,6 +13,10 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
+    path: "main",
+    component: MainComponent,  
+  },
+  {
     path: "login",
     component: LoginComponent
   },
@@ -20,9 +25,10 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: "main",
-    component: MainComponent,  
+    path: "anime",
+    component: AnimeComponent
   },
+
   {
     path: "**",
     component: NotFoundComponent

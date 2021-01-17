@@ -6,12 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
- 
+import { MatCardModule } from '@angular/material/card';
+
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BlockComponent } from './block/block.component';
@@ -23,12 +24,12 @@ import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anim
 @NgModule({
   declarations: [
     HeaderComponent,
-    FooterComponent, 
-    BlockComponent, 
-    FormComponent, 
-    AnimeBlockListComponent, 
-    UserBlockListComponent, 
-    TopAnimeBlockListComponent
+    FooterComponent,
+    BlockComponent,
+    FormComponent,
+    AnimeBlockListComponent,
+    UserBlockListComponent,
+    TopAnimeBlockListComponent,
   ],
   imports: [
     MatToolbarModule,
@@ -41,16 +42,20 @@ import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anim
     MatButtonModule,
     RouterModule,
     MatMenuModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ],
-  exports:[
+  exports: [
     HeaderComponent,
     FooterComponent,
     BlockComponent,
     FormComponent,
     AnimeBlockListComponent,
     UserBlockListComponent,
-    TopAnimeBlockListComponent
-  ]
+    TopAnimeBlockListComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule
+  ],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}
