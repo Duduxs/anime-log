@@ -10,6 +10,9 @@
     <button mat-raised-button type="submit" class="add-btn">
       <mat-icon>add_circle_outline</mat-icon> Adicionar anime em minha lista
     </button>
+    <button mat-raised-button type="submit" class="edit-btn" (click)="openDialog()">
+      <mat-icon>edit</mat-icon> Editar anime
+    </button>
     <mat-card-content class="anime-info">
       <div class="anime-alternative-titles">
         <h2>Títulos alternativos</h2>
@@ -35,7 +38,6 @@
         src="https://www.youtube.com/embed/PwVT67T5Xt4?controls=0"
         frameborder="0"
         allowfullscreen
-        controls="1"
       ></iframe>
       <div class="sinopse">
         <p class="sinopse-text">

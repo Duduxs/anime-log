@@ -6,6 +6,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { MainComponent } from './pages/main/main.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { UserComponent } from './pages/user/user.component';
 
 const routes: Routes = [
   {
@@ -28,7 +29,10 @@ const routes: Routes = [
     path: "anime",
     component: AnimeComponent
   },
-
+  {
+    path: "user",
+    component: UserComponent
+  },
   {
     path: "**",
     component: NotFoundComponent

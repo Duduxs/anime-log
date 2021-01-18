@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -20,6 +21,7 @@ import { FormComponent } from './form/form.component';
 import { AnimeBlockListComponent } from './main/anime-block-list/anime-block-list.component';
 import { UserBlockListComponent } from './main/user-block-list/user-block-list.component';
 import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anime-block-list.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anim
     AnimeBlockListComponent,
     UserBlockListComponent,
     TopAnimeBlockListComponent,
+    DialogComponent,
   ],
   imports: [
     MatToolbarModule,
@@ -43,7 +46,8 @@ import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anim
     RouterModule,
     MatMenuModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
   exports: [
     HeaderComponent,
@@ -55,7 +59,8 @@ import { TopAnimeBlockListComponent } from './main/top-anime-block-list/top-anim
     TopAnimeBlockListComponent,
     MatButtonModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
 })
 export class ComponentsModule {}
