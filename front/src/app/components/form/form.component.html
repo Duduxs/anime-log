@@ -1,0 +1,29 @@
+<div class="content">
+    <form [formGroup]="form">
+
+    <mat-form-field appearance="fill" *ngIf="!login" [ngStyle]="{'marginTop': login ? '120px' : '50px'}">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput placeholder="arthur@example.com" formControlName="email" #emailInput>
+        <mat-hint *ngIf="!(emailInput.value.length >= 6 && emailInput.value.length <= 35)">Email deve ter entre 6 a 35 caracteres</mat-hint>
+    </mat-form-field >
+
+    <mat-form-field appearance="fill" [ngStyle]="{'marginTop': login ? '120px' : '50px'}">
+        <mat-label>Login</mat-label>
+        <input type="text" matInput placeholder="Seu nome de usuário" formControlName="login" #loginInput>
+        <mat-hint *ngIf="!(loginInput.value.length >= 4 && loginInput.value.length <= 10)">Login deve ter entre 4 a 10 caracteres</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" [ngStyle]="{'marginTop': login ? '120px' : '50px'}">
+        <mat-label>Senha</mat-label>
+        <input [type]="hide ? 'password' : 'text'" matInput placeholder="Sua senha"  formControlName="senha" #loginPassword>
+        <mat-hint *ngIf="!(loginPassword.value.length >= 5 && loginPassword.value.length <= 10)">Senha deve ter entre 5 a 10 caracteres</mat-hint>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      
+      <br>
+      <button mat-raised-button type="submit" [disabled]="form.invalid" (click)="onSubmit()">{{ login ? "Logar" : "Registrar" }}</button>
+      <p>Na verdade quero me <a [routerLink]=" login ? ['/register'] : ['/login']">{{login ? "registrar" : "logar"}}</a></p>
+    </form>
+</div>

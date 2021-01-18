@@ -1,0 +1,27 @@
+div{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h1{
+        font-size: 120px;
+        margin-bottom: 100px;
+        
+        span{
+            margin-left: 50px;
+        }
+    }
+
+    .paragraph{
+        margin-left: 17px;
+    }
+
+    a{
+        text-decoration: none;
+        color: #774ca0;
+    }
+
+
+}

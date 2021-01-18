@@ -77,7 +77,7 @@ public class ClientResource {
 
 	@GET
 	public Response findAllPaged(
-			@Min(0) @QueryParam("min") Integer min, 
+			@Min(0) @QueryParam("min") Integer min,
 			@Max(2000) @QueryParam("max") Integer max
 			) {
 		PageRequest pageRequest = PageRequest.of(min, max, Sort.Direction.ASC, "login");

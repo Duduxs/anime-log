@@ -1,0 +1,39 @@
+@keyframes float {
+	0% {
+		box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+		transform: translatey(0px);
+	}
+	50% {
+		box-shadow: 0 25px 15px 0px rgba(0,0,0,0.2);
+		transform: translatey(-20px);
+	}
+	100% {
+		box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+		transform: translatey(0px);
+	}
+}
+
+div{
+    height: 300px;
+    width: 550px;
+    background-color: #934aede0;
+    border-radius: 10px;
+    animation: float 6s ease-in-out infinite;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.048);
+
+    &:hover{
+        background-color: #934aedc2;
+    }
+
+    p{
+        font-size: 68px;
+        text-align: center;
+        line-height: 300px; 
+        color: #BC92F0;
+
+        &:hover{
+            color: white;
+        }
+    }
+}
+

@@ -1,0 +1,99 @@
+.header {
+  background-color: #bc92f0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  h1 {
+    font-family: "Rosario", "sans-serif";
+    padding-left: 10px;
+    margin: 0;
+    font-weight: bolder;
+    font-size: 30px;
+    color: #743aba;
+  }
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .anime-content {
+    display: flex;
+    margin-top: 30px;
+    width: 2400px;
+    height: 700px;
+    background-color: #bc92f0;
+
+    img {
+      height: 95%;
+      width: 550px;
+      border-radius: 100px;
+      object-fit: cover;
+      border: 3px solid white;
+    }
+
+    .add-btn {
+      margin-left: 54px;
+      margin-bottom: 3px;
+
+      width: 270px;
+    }
+
+    .edit-btn {
+      width: 200px;
+      margin-bottom: 3px;
+      margin-left: 350px;
+    }
+
+    .add-btn,
+    .edit-btn {
+      position: absolute;
+      bottom: 0;
+
+      mat-icon {
+        margin-right: 5px;
+      }
+    }
+
+    .anime-info {
+      margin-left: 20px;
+      align-self: center;
+
+      h2 {
+        font-size: 50px;
+      }
+
+      p {
+        font-size: 25px;
+      }
+      h2,
+      p {
+        padding: 8px;
+        color: #44226e;
+      }
+    }
+
+    .additional-info {
+      iframe,
+      .sinopse {
+        margin-left: 350px;
+        width: 1000px;
+        height: 300px;
+        border-radius: 4px;
+      }
+      .sinopse {
+        margin-top: 95px;
+        background-color: #56436e;
+        .sinopse-text {
+          padding: 20px;
+          text-indent: 2em;
+          text-align: justify;
+          font-size: 20px;
+          color: white;
+        }
+      }
+    }
+  }
+}

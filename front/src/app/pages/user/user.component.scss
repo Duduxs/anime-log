@@ -1,0 +1,86 @@
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .user-mat {
+    display: flex;
+    margin-top: 30px;
+    width: 2400px;
+    height: 700px;
+    background-color: #bc92f0;
+
+    .user-content {
+      .user-info {
+        width: 366px;
+        height: 400px;
+
+        mat-icon {
+          margin-right: 5px;
+        }
+        .user-img {
+          border: 2px solid rgb(58, 6, 6);
+          width: 350px;
+          height: 250px;
+          padding: 0;
+          margin: 0;
+          object-fit: cover;
+        }
+      }
+      .user-action {
+        margin: 0;
+        .add-btn {
+          background-color: rgb(102, 214, 102);
+        }
+        .edit-btn {
+          background-color: rgb(243, 223, 42);
+        }
+        .remove-btn {
+          margin: 0;
+          background-color: rgb(214, 143, 102);
+        }
+      }
+      .user-info-text {
+        font-family: "Rosario", "sans-serif";
+        p {
+          margin: 0;
+          color: #44226e;
+        }
+      }
+      .user-list-btn {
+        width: 100%;
+      }
+      .user-friend {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        h2 {
+          margin-top: 5px;
+          margin-bottom: 10px;
+        }
+        a{
+            text-decoration: none;
+        }
+        .user-friend-all {
+          position: absolute;
+          margin-top: 10px;
+          align-self: flex-end;
+        }
+        .user-friend-img-container {
+          img {
+            margin-left: 10px;
+            border-radius: 5px;
+            width: 75px;
+            height: 75px;
+            opacity: 0.9;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

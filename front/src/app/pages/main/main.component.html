@@ -1,0 +1,58 @@
+<div class="content">
+  <div class="anime-content">
+    <div class="seasonAnimes">
+      <h1 class="anime-header-title">Animes da temporada de verão de 2021</h1>
+      <hr />
+      <app-anime-block-list
+        title="Naruto"
+        img="https://img.ibxk.com.br//ms/images/highlights/000/048/935/46162.jpg?w=1200&h=675&mode=crop&scale=both"
+      >
+      </app-anime-block-list>
+    </div>
+
+    <div class="lastAnimes">
+      <h1 class="anime-header-title">Últimos animes adicionados</h1>
+      <hr />
+      <app-anime-block-list
+        *ngFor="let anime of animes"
+        title="{{ anime.title }}"
+        img="{{ anime.img }}"
+      >
+      </app-anime-block-list>
+    </div>
+  </div>
+
+  <div class="user-content">
+    <div class="users">
+      <h1 class="user-header-title">Usuários online</h1>
+      <app-user-block-list
+        *ngFor="let user of users"
+        login="{{ user.login }}"
+        img="{{ user.img }}"
+      >
+      </app-user-block-list>
+    </div>
+  </div>
+  <div class="rank-content">
+    <div class="ranks">
+      <h1 class="rank-most-popular-header-title">Animes mais populares</h1>
+      <app-top-anime-block-list
+        *ngFor="let anime of animes"
+        title="{{ anime.title }}"
+        img="{{ anime.img }}"
+        index="{{ animes.indexOf(anime) +1 }} "
+      >
+      </app-top-anime-block-list>
+    </div>
+    <div class="ranks">
+      <h1 class="rank-less-popular-header-title">Animes menos populares</h1>
+      <app-top-anime-block-list
+      *ngFor="let anime of animes"
+      title="{{ anime.title }}"
+      img="{{ anime.img }}"
+      index="{{ animes.indexOf(anime) +1 }} "
+    >
+    </app-top-anime-block-list>
+    </div>
+  </div>
+</div>

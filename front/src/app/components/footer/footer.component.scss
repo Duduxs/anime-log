@@ -1,0 +1,37 @@
+mat-toolbar {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  box-shadow: 2px 0px 0px black;
+
+  .social {
+    height: 90%;
+    display: flex;
+    align-items: flex-end;
+    mat-icon {
+      padding-left: 10px;
+    }
+    a {
+      opacity: 0.9;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .favorite {
+    vertical-align: middle;
+
+    &:hover {
+      color: red;
+    }
+  }
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
